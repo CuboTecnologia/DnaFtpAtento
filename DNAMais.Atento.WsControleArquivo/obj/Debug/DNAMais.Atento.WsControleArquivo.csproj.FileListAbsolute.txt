@@ -5,3 +5,10 @@ C:\Projetos\DNAMais.Atento.WsControleArquivo\bin\Oracle.ManagedDataAccess.dll
 C:\Projetos\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.csprojResolveAssemblyReference.cache
 C:\Projetos\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.dll
 C:\Projetos\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.pdb
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\bin\DNAMais.Atento.WsControleArquivo.dll.config
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\bin\DNAMais.Atento.WsControleArquivo.dll
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\bin\DNAMais.Atento.WsControleArquivo.pdb
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\bin\Oracle.ManagedDataAccess.dll
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.csprojResolveAssemblyReference.cache
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.dll
+C:\GitHub\Projects\DNA\DnaFtpAtento\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.pdb
