@@ -1,0 +1,67 @@
+﻿@using (Html.BeginForm("ListarFtpEntrada", "ControleArquivo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    @Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+                </p>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h2>Arquivos Enviados</h2></div>
+                    <div class="panel-body">
+                        <table id="table" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>nº</th>
+                                    <th>Nome Arquivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @{
+                                    int i = 0;
+                                }
+
+                                @foreach (var item in ViewBag.ListaArquivoEntradaFtp)
+                                {
+
+                                    i++;
+                                    <tr>
+                                        <td class="col-md-1">@i</td>
+                                        <td class="col-md-11">@item</td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="panel-heading">
+                        <div class="form-group panel-heading">
+                            @Html.Label("Arquivo", new { id = "fileInput", @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <input type="file" name="file" id="file" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input type="submit" id="btnEnviar" value="Enviar" class="btn btn-enviar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

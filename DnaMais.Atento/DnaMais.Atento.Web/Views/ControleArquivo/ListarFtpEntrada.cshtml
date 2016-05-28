@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Dna+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_DataTableScript")
+
+@Html.Partial("_ElementosCabeçalho")
+
+<hr />
+
+@if (TempData["notice"] != null)
+{
+    <p style="color:#22862c">@TempData["notice"]</p>
+}
+
+@Html.Partial("_GridFtpEntrada")
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).on('ready', function () {
+            $("#file").fileinput({ 'showUpload': false });
+
+
+            $("#btnSalvar").click(function () {
+
+                var ddlEntrada = $("#ddlEntrada").val();
+
+                var ddlSaida = $("#ddlSaida").val();
+
+                var fileInput = $("#file").val();
+
+                if (ddlEntrada == "" || ddlSaida == "" || fileInput == "") {
+                    $("#pMsg").empty();
+
+                    $("#pMsg").append("<strong>Todos os Campos são obrigatorios!</strong>");
+                    return false;
+                }
+                else {
+                    $("#pMsg").empty();
+                }
+            });
+        });
+
+    </script>
+
+}

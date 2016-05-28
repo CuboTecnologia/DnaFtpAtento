@@ -1,0 +1,98 @@
+﻿@model IEnumerable<DnaMais.Atento.Web.Models.ControleArquivoModel>
+
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="container">
+        @Html.ActionLink("Sair do Sistema", "LogOff", "Home", new { area = "" }, new { @class = "btn btn-logoff" })
+        @Html.ActionLink("Criar Novo Usuário", "CriarUsuario", "Home", new { area = "" }, new { @class = "btn btn-logoff" })
+        Logado como @ViewData["loggedUser"]
+    </div>
+</div>
+
+<hr />
+
+@if (TempData["notice"] != null)
+{
+    <p style="color:#22862c">@TempData["notice"]</p>
+}
+
+<table id="tblControle" class="table table-bordered table-condensed table-hover table-striped">
+    <tr>
+        <th>
+            Código
+        </th>
+        <th>
+            Entrada
+        </th>
+        <th>
+            Saída
+        </th>
+        <th>
+            Arquivo
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Registro
+        </th>
+        <th>
+            Início Execução
+        </th>
+        <th>
+            Término Execução
+        </th>
+    </tr>
+    
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayoutEntrada.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayoutSaida.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeArquivoEntrada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem=> item.Status.DescricaoStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataRegistro)
+            </td>
+            <td>
+                --
+            </td>
+            <td>
+                --
+            </td>
+        </tr>
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Novo Processamento", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<script>
+
+    $(document).ready(function () {
+
+        setInterval(function () {
+
+            $('#tblControle').load("#tblControle")
+
+        },3000);
+
+    });
+
+</script>

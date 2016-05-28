@@ -1,0 +1,51 @@
+﻿@using (Html.BeginForm("ListarFtpSaida", "ControleArquivo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    @Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", new { @class = "btn btn-primary" })
+                </p>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h2>Arquivos Disponíveis para Download</h2></div>
+                    <div class="panel-body">
+                        <table id="table" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>nº</th>
+                                    <th>Nome Arquivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @{int i = 0;}
+
+                                @foreach (string item in ViewBag.ListaArquivoSaidaFtp)
+                                {
+                                    i++;
+                                    <tr>
+                                        <td class="col-md-1">
+                                            @i
+                                        </td>
+
+                                        <td class="col-md-11">
+                                            @Html.ActionLink(item, "DownloadFtpSaida", "ControleArquivo", new { nomeArquivoDownload = item }, null)
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

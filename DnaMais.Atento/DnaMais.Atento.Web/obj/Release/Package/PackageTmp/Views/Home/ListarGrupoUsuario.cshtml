@@ -1,0 +1,63 @@
+﻿@model IEnumerable<DnaMais.Atento.Web.Models.GrupoUsuarioModel>
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_DataTableScript")
+
+<hr />
+@if (TempData["newGrupo"] != null)
+{
+    <p style="color:#22862c">@TempData["newGrupo"]</p>
+}
+
+@using (Html.BeginForm("ListarFtpEntrada", "ControleArquivo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    @Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Criar Novo Grupo", "CriarGrupoUsuario", "Home", null, new { @class = "btn btn-primary" })
+                </p>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h2>Lista de Grupo de Usuários</h2></div>
+                    <div class="panel-body">
+                        <table id="table" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nome do Grupo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="col-md-1">
+                                            @Html.DisplayFor(modelItem => item.Codigo)
+                                        </td>
+                                        <td class="col-md-6">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                        </td>
+                                        <td class="col-md-5">
+                                            @Html.DisplayFor(modelItem => item.Descricao)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

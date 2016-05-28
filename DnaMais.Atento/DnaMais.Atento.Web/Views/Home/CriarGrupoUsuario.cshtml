@@ -1,0 +1,52 @@
+﻿@model DnaMais.Atento.Web.Models.GrupoUsuarioModel
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hr />
+
+@Html.ActionLink("Voltar", "ListarGrupoUsuario", "Home", null, new { @class = "btn btn-primary" })
+
+<hr />
+
+<h2>Criar Grupo de Usuário</h2>
+
+@{
+    Html.BeginForm("CriarGrupoUsuario", "Home");
+    <fieldset>
+        <div>
+            @Html.LabelFor(model => model.Nome)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control", @id = "txtNome" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Descricao)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Descricao, new { @class = "form-control", @id = "txtDescricao" })
+        </div>
+        <br />
+        <div class="editor-field">
+            @if (TempData["newUserFail"] != null)
+            {
+                <p style="color:red">@TempData["newUserFail"]</p>
+            }
+        </div>
+        <br />
+    </fieldset>
+    <input type="submit" id="btnNovoGrupo" value="Criar Novo Grupo" class="btn btn-primary" />
+
+}
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#txtNome').focus();
+
+    });
+
+</script>

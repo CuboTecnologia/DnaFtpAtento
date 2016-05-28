@@ -1,0 +1,53 @@
+﻿@model IEnumerable<DnaMais.Atento.Web.Models.UsuarioModel>
+@{
+    ViewBag.Title = "ListarUsuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_ElementosCabeçalho")
+
+<hr />
+
+@Html.ActionLink("Voltar", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+
+<hr />
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h2>Usuários Cadastrados</h2></div>
+       
+            <table id="table" class="table-bordered table-hover table-striped table-condensed" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Usuário</th>
+                        <th>E-Mail</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Grupos.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usuario)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "EditarUsuarios", "Home", new { usuarioNome = item.Usuario, usuarioGrupo = item.Grupos.Nome }, null)
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

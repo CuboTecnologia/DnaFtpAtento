@@ -1,0 +1,41 @@
+﻿<h2>Criar Novo Usuário</h2>
+
+@{
+    Html.BeginForm("CriarUsuario", "Home");
+    <fieldset>
+        <div>
+            @Html.LabelFor(model => model.Login)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Senha)
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.Senha, new { @class = "form-control", @id = "txtSenha" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.ConfirmarSenha)
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.ConfirmarSenha, new { @class = "form-control", @id = "txtConfirmarSenha" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Usuario)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", @id = "txtUsuario" })
+        </div>
+        <div class="editor-field">
+            @if (TempData["newUserFail"] != null)
+            {
+                <p style="color:red">@TempData["newUserFail"]</p>
+            }
+        </div>
+        <br />
+    </fieldset>
+    <input type="submit" id="btnNovoUsuario" value="Criar" class="btn btn-primary" />

@@ -1,0 +1,128 @@
+﻿@model DnaMais.Atento.Web.Models.UsuarioModel
+@using DnaMais.Atento.Web.Models
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_ElementosCabeçalho")
+
+<hr />
+
+@Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+
+<hr />
+
+<h2>Criar Novo Usuário</h2>
+
+@{
+    Html.BeginForm("CriarUsuario", "Home");
+    <fieldset>
+        <div>
+            @Html.LabelFor(model => model.Login)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Senha)
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.Senha, new { @class = "form-control", @id = "txtSenha" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.ConfirmarSenha)
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.ConfirmarSenha, new { @class = "form-control", @id = "txtConfirmarSenha" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Usuario)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", @id = "txtUsuario" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "txtEmail" })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.Label("Grupo")
+        </div>
+        <div class="editor-field">
+            @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
+            {
+                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)"/>@item.Text
+                <br />
+            }
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.Label("Tipo de Usuário")
+        </div>
+
+        @if (Session["TipoUsuario"].ToString() == "A")
+        {
+            <div class="editor-field">
+                @Html.RadioButtonFor(model => model.TipoUsuario, "A", new { @id = "rdbA" }) Administrativo
+            </div>
+        }
+        <div class="editor-field">
+            @Html.RadioButtonFor(model => model.TipoUsuario, "M", new { @id = "rdbM" }) Master
+        </div>
+        <div class="editor-field">
+            @Html.RadioButtonFor(model => model.TipoUsuario, "N", new { @id = "rdbN" }) Normal
+        </div>
+        <div class="editor-field">
+            @if (TempData["newUserFail"] != null)
+            {
+                <p style="color:red">@TempData["newUserFail"]</p>
+            }
+        </div>
+        <br />
+    </fieldset>
+    <input type="submit" id="btnNovoUsuario" value="Criar Novo Usuário" class="btn btn-primary" />
+
+    <script>
+
+        $(document).ready(function () {
+            $("#txtLogin").focus();
+
+            $("#btnNovoUsuario").click(function () {
+
+                var senha = $("#txtSenha").val();
+                var confirmarSenha = $("#txtConfirmarSenha").val();
+                var sEmail = $('#txtEmail').val();
+
+                if (senha != confirmarSenha) {
+
+                    alert('Campo Senha e Confirmar Senha estão Diferentes');
+                    event.preventDefault();
+                    $('#txtSenha').focus();
+                }
+
+                else if (!validateEmail(sEmail)) {
+                    alert('Insira um E-Mail Válido');
+                    event.preventDefault();
+                    $('#txtEmail').focus();
+                }
+
+                //else if (!$('#rdbA:checked').val() || !$('#rdbM:checked').val() || !$('#rdbN:checked').val()) {
+                //    alert('Selecione um Tipo de Usuário');
+                //    event.preventDefault();
+                //}
+                
+            });
+
+
+        });
+
+    </script>
+}

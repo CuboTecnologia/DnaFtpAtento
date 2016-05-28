@@ -1,0 +1,120 @@
+﻿@model IEnumerable<DnaMais.Atento.Web.Models.ControleArquivoModel>
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@Html.Partial("_ElementosCabeçalho")
+
+<hr />
+
+@Html.ActionLink("Voltar", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+
+<hr />
+
+@if (TempData["notice"] != null)
+{
+    <p style="color:#22862c">@TempData["notice"]</p>
+}
+
+@if (TempData["newUser"] != null)
+{
+    <p style="color:#22862c">@TempData["newUser"]</p>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h2>Relatório de Processamento </h2></div>
+            <table id="table" class="table-bordered table-hover table-striped table-condensed" cellspacing="0" width="100%">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <h4><strong>ID: </strong>@Html.DisplayFor(modelItem => item.Codigo)</h4>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <table id="table" class="table-bordered table-hover table-striped table-condensed" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th class="col-lg-">Entrada</th>
+                        <th class="col-lg-">Saída</th>
+                        <th class="col-lg-">Arquivo Recebido</th>
+                        <th class="col-lg-">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LayoutEntrada.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LayoutSaida.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NomeArquivoEntradaOriginal)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status.DescricaoStatus)
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th class="col-lg-">Controle Datas</th>
+                        <th class="col-lg-">Arquivo Download</th>
+                        <th class="col-lg-">Solicitante</th>
+                        <th class="col-lg-">Resumo</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-left">
+                                <table>
+                                    <tr>
+                                        <td align="right">Registro:&nbsp; </td>
+                                        <td nowrap><strong>@Html.DisplayFor(modelItem => item.DataRegistro)</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Início:&nbsp;</td>
+                                        <td nowrap><strong>@(item.DataInicioExecucao == null ? "" : ((DateTime)item.DataInicioExecucao).ToString("dd/MM/yyyy HH:mm"))</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Término:&nbsp;</td>
+                                        <td nowrap><strong>@(item.DataTerminoExecucao == null ? "" : ((DateTime)item.DataTerminoExecucao).ToString("dd/MM/yyyy HH:mm"))</strong></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td valign="middle">
+                                @Html.DisplayFor(modelItem => item.NomeArquivoDownload)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NomeUsuarioSolicitante)
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td align="right">Itens Recebidos:&nbsp;</td>
+                                        <td><strong>@Html.DisplayFor(modelItem => item.QtdeItensRecebidos)</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Itens Processados:&nbsp;</td>
+                                        <td><strong>@Html.DisplayFor(modelItem => item.QtdeItensProcessados)</strong></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

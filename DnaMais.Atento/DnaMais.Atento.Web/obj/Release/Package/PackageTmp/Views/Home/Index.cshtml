@@ -1,0 +1,63 @@
+﻿@model DnaMais.Atento.Web.Models.UsuarioModel
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<hr />
+
+@if (TempData["sessionFinalizada"] == null)
+{
+    <p style="color:red">@TempData["sessionFinalizada"]</p>
+}
+
+@{
+    Html.BeginForm("Acessar", "Home");
+
+    <fieldset>
+        <div>
+            @Html.LabelFor(model => model.Login)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin"  })
+        </div>
+        <br />
+        <div class="control-label">
+            @Html.LabelFor(model => model.Senha)
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.Senha, new { @class = "form-control", @id = "txtSenha" })
+        </div>
+        <div class="editor-field">
+            @if (TempData["logado"] != null)
+            {
+                <p style="color:red">@TempData["logado"]</p>
+            }
+        </div>
+    </fieldset>
+    <br />
+    <input type="submit"  id="btnAcessar" value="Acessar" class="btn btn-primary" />
+
+    <script>
+
+        $(document).ready(function () {
+            $("#txtLogin").focus();
+
+            $("#btnAcessar").click(function () {
+
+                var login = $("#txtLogin").val();
+                
+                var senha = $("#txtSenha").val();
+
+                if (login == "" || senha == "") {
+                    alert("Preencha os campos corretamente!")
+                    
+                }
+
+
+            });
+
+        });
+
+    </script>
+}

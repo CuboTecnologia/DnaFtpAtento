@@ -1,0 +1,89 @@
+﻿@model DnaMais.Atento.Web.Models.ControleArquivoModel
+@using DnaMais.Atento.Web.Models;
+@{
+    ViewBag.Title = "DNA+ | Atento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_ElementosCabeçalho")
+
+@using (Html.BeginForm("Create", "ControleArquivo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.Label("Layout Entrada", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CodigoLayoutEntrada, ViewData["LayoutsEntrada"] as IEnumerable<SelectListItem>, "Selecione", new { id = "ddlEntrada", @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Layout Saída", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CodigoLayoutSaida, ViewData["LayoutsSaida"] as IEnumerable<SelectListItem>, "Selecione", new { id = "ddlSaida", @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Arquivo, new { id = "fileInput", @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" />
+                @Html.ValidationMessageFor(model => model.Arquivo)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <p id="pMsg" style="color:red"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="btnSalvar" value="Salvar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<p>
+    @Html.ActionLink("Voltar", "ListarArquivo", "ControleArquivo", new { @class = "btn btn-primary" })
+</p>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).on('ready', function () {
+            $("#file").fileinput({ 'showUpload': false });
+
+
+            $("#btnSalvar").click(function () {
+
+                var ddlEntrada = $("#ddlEntrada").val();
+
+                var ddlSaida = $("#ddlSaida").val();
+
+                var fileInput = $("#file").val();
+
+                if (ddlEntrada == "" || ddlSaida == "" || fileInput == "") {
+                    $("#pMsg").empty();
+
+                    $("#pMsg").append("<strong>Todos os Campos são obrigatorios!</strong>");
+                    return false;
+                }
+                else {
+                    $("#pMsg").empty();
+                }
+
+
+
+            });
+        });
+    </script>
+
+}
