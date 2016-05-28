@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Publish\AtentoWsControleArquivo\170516</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/DNAMais.Atento.WsControleArquivo.dll">
+      <publishTime>05/17/2016 13:28:53</publishTime>
+    </File>
+    <File Include="bin/Oracle.ManagedDataAccess.dll">
+      <publishTime>05/10/2016 22:06:39</publishTime>
+    </File>
+    <File Include="ControleArquivo.asmx">
+      <publishTime>05/16/2016 17:59:42</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>05/17/2016 13:21:01</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>05/17/2016 13:28:54</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

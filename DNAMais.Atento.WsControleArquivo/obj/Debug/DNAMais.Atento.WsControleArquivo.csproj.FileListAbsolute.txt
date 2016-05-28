@@ -1,0 +1,7 @@
+C:\Projetos\DNAMais.Atento.WsControleArquivo\bin\DNAMais.Atento.WsControleArquivo.dll.config
+C:\Projetos\DNAMais.Atento.WsControleArquivo\bin\DNAMais.Atento.WsControleArquivo.dll
+C:\Projetos\DNAMais.Atento.WsControleArquivo\bin\DNAMais.Atento.WsControleArquivo.pdb
+C:\Projetos\DNAMais.Atento.WsControleArquivo\bin\Oracle.ManagedDataAccess.dll
+C:\Projetos\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.csprojResolveAssemblyReference.cache
+C:\Projetos\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.dll
+C:\Projetos\DNAMais.Atento.WsControleArquivo\obj\Debug\DNAMais.Atento.WsControleArquivo.pdb
