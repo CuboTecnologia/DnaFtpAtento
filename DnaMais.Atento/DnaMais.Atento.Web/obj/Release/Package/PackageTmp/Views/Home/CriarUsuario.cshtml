@@ -9,7 +9,7 @@
 
 <hr />
 
-@Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Voltar para Listagem de Usuários", "ListarUsuarios", "Home", null, new { @class = "btn btn-primary" })
 
 <hr />
 
@@ -59,7 +59,7 @@
         <div class="editor-field">
             @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
             {
-                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)"/>@item.Text
+                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" />@item.Text
                 <br />
             }
         </div>
@@ -101,7 +101,12 @@
                 var confirmarSenha = $("#txtConfirmarSenha").val();
                 var sEmail = $('#txtEmail').val();
 
-                if (senha != confirmarSenha) {
+                if ($('#txtLogin').val() == "" || $('#txtSenha').val() == "" || $('#txtUsuario').val() == "") {
+                    alert('Todos os campos são obrigatórios!');
+                    return false;
+                }
+
+                else if (senha != confirmarSenha) {
 
                     alert('Campo Senha e Confirmar Senha estão Diferentes');
                     event.preventDefault();
@@ -114,11 +119,18 @@
                     $('#txtEmail').focus();
                 }
 
-                //else if (!$('#rdbA:checked').val() || !$('#rdbM:checked').val() || !$('#rdbN:checked').val()) {
-                //    alert('Selecione um Tipo de Usuário');
-                //    event.preventDefault();
-                //}
-                
+                else if (!$('checkbox').is(":checked")) {
+                    alert('Selecione um Grupo');
+                    event.preventDefault();
+                }
+
+                else if ($('#rdbA').is(":checked") || $('#rdbM').is(":checked") || $('#rdbN').is(":checked")) {
+                    return true;
+                }
+                else {
+                    alert('Selecione um Tipo de Usuário');
+                    event.preventDefault();
+                }
             });
 
 

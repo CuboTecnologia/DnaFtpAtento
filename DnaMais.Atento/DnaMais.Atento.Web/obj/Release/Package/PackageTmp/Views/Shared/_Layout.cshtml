@@ -43,7 +43,7 @@
                         if (Session["TipoUsuario"].ToString() == "A" || Session["TipoUsuario"].ToString() == "M")
                         {
                             @Html.ActionLink("Grupo de Usuário", "ListarGrupoUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
-                            @Html.ActionLink("Criar Novo Usuário", "CriarUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
+                            @Html.ActionLink("Gerenciar Usuários", "ListarUsuarios", "Home", new { area = "" }, new { @class = "btn btn-menu" })
                         }
 
                         @Html.ActionLink("Upload Ftp", "ListarFtpEntrada", "ControleArquivo", new { area = "" }, new { @class = "btn btn-menu" })
