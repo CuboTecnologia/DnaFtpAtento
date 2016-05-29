@@ -403,5 +403,82 @@ AS
                             DS_LOGIN = P_DS_LOGIN);
          END IF;
     END;
+	
+  PROCEDURE LISTAR_USUARIOS
+  (
+      P_DS_LOGIN        IN  USUARIO_ATENTO.DS_LOGIN%TYPE,
+      RETORNO_USUARIOS  OUT SYS_REFCURSOR
+  )
+  IS
+  BEGIN
+  
+      OPEN
+          RETORNO_USUARIOS
+      FOR
+  
+        SELECT 
+                NM_USUARIO,
+                DS_EMAIL,
+                NM_GRUPO_USUARIO_ATENTO 
+        FROM 
+                USUARIO_ATENTO
+        JOIN
+                USUARIO_ATENTO_GRUPO_USUARIO
+        ON
+                USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
+        JOIN
+                GRUPO_USUARIO_ATENTO
+        ON
+                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
+        WHERE
+                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO 
+        IN
+          (SELECT 
+                  ID_GRUPO_USUARIO_ATENTO 
+          FROM 
+                  USUARIO_ATENTO_GRUPO_USUARIO 
+          WHERE 
+                  DS_LOGIN = P_DS_LOGIN);
+  END;
+  
+    PROCEDURE EDITAR_USUARIO
+    (
+        P_NM_USUARIO        IN USUARIO_ATENTO.NM_USUARIO%TYPE,
+        P_NM_GRUPO          IN GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO%TYPE,
+        RETORNO_USUARIO     OUT SYS_REFCURSOR
+    )
+    IS
+    BEGIN
+    
+    OPEN
+          RETORNO_USUARIO
+    FOR
+    
+    SELECT 
+                NM_USUARIO,
+                DS_EMAIL,
+                NM_GRUPO_USUARIO_ATENTO 
+        FROM 
+                USUARIO_ATENTO
+        JOIN
+                USUARIO_ATENTO_GRUPO_USUARIO
+        ON
+                USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
+        JOIN
+                GRUPO_USUARIO_ATENTO
+        ON
+                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
+        WHERE
+                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO 
+        IN
+          (SELECT 
+                  ID_GRUPO_USUARIO_ATENTO 
+          FROM 
+                  USUARIO_ATENTO_GRUPO_USUARIO 
+          WHERE 
+                  USUARIO_ATENTO.NM_USUARIO = P_NM_USUARIO)
+          AND
+                  GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO = P_NM_GRUPO;
+    END;
     
 END;
