@@ -6,8 +6,6 @@
 
 @Html.Partial("_DataTableScriptListarArquivo")
 
-@Html.Partial("_ElementosCabeçalho")
-
 <hr />
 
 @if (TempData["notice"] != null)
@@ -74,7 +72,7 @@
                                         Registro:
                                     </div>
                                     <div style="float: left;">
-                                        <strong>    @Html.DisplayFor(modelItem => item.DataRegistro)</strong>
+                                        <strong>@Html.DisplayFor(modelItem => item.DataRegistro)</strong>
                                     </div>
 
                                     <br /><br />
