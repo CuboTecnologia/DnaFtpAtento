@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<DnaMais.Atento.Web.Models.UsuarioModel>
 @{
-    ViewBag.Title = "ListarUsuarios";
+    ViewBag.Title = "DNA+ | Atento";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Partial("_ElementosCabeçalho")
-
 <hr />
 
-@Html.ActionLink("Voltar", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Criar Novo Usuário", "CriarUsuario", "Home", null, new { @class = "btn btn-primary" })
 
 <hr />
 
