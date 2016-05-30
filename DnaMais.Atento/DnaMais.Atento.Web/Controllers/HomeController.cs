@@ -174,13 +174,27 @@ namespace DnaMais.Atento.Web.Controllers
 
         #endregion
 
-        #region Editar Usuários
+        #region Editar Usuário
 
-        public ActionResult EditarUsuarios(string usuarioNome, string usuarioGrupo)
+        public ActionResult EditarUsuario(string usuarioNome, string usuarioLogin)
         {
-            var models = _controleArquivoRepository.EditarUsuario(usuarioNome, usuarioGrupo);
+            var models = _controleArquivoRepository.EditarUsuario(usuarioNome, usuarioLogin);
 
             return View(models);
+        }
+
+        #endregion
+
+        #region Editar Usuário [HttpPost]
+
+        [HttpPost]
+        public ActionResult EditarUsuario(string txtUsuario, string txtEmail, UsuarioModel model)
+        {
+            _controleArquivoRepository.AtualizarUsuario(txtUsuario, txtEmail, model);
+
+            TempData["updateUser"] = "Usuário Atualizado com Sucesso!";
+
+            return RedirectToAction("ListarUsuarios","Home");
         }
 
         #endregion
