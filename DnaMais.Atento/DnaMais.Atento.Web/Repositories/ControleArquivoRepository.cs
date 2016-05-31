@@ -419,8 +419,8 @@ namespace DnaMais.Atento.Web.Repositories
                                     DataTerminoExecucao = reader["DT_TERMINO_EXECUCAO"] != DBNull.Value ? (DateTime?)reader["DT_TERMINO_EXECUCAO"] : null,
                                     NomeArquivoDownload = reader["NM_ARQUIVO_DOWNLOAD"].ToString(),
                                     NomeUsuarioSolicitante = reader["NM_USUARIO"].ToString(),
-                                    QtdeItensRecebidos = Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
-                                    QtdeItensProcessados = Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"])
+                                    QtdeItensRecebidos = reader["QT_ITENS_RECEBIDOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
+                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"])
                                 });
                             }
                         }

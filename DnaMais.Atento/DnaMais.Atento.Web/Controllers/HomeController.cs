@@ -54,7 +54,7 @@ namespace DnaMais.Atento.Web.Controllers
             }
             else
             {
-                TempData["logado"] = "Usuário e/ou Senha Incorreto(s)!";
+                TempData["verificarLogin"] = "Usuário e/ou Senha Incorreto(s)!";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -80,6 +80,11 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult CriarUsuario()
         {
+            if (Session["LoginUsuario"] == null)
+            {
+                System.Web.Security.FormsAuthentication.RedirectToLoginPage();
+            }
+
             ViewData["GrupoUsuarioCkl"] = _controleArquivoRepository.GetAllGruposCkl(Session["TipoUsuario"].ToString(), Session["LoginUsuario"].ToString()).ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(), Text = x.Nome });
 
             return View();
@@ -104,8 +109,6 @@ namespace DnaMais.Atento.Web.Controllers
             }
             else
             {
-                TempData["newUserFail"] = "Preencha todos os Campos!";
-
                 return RedirectToAction("CriarUsuario", "Home");
             }
         }
@@ -166,6 +169,10 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult ListarUsuarios()
         {
+            if (Session["LoginUsuario"] == null)
+            {
+                System.Web.Security.FormsAuthentication.RedirectToLoginPage();
+            }
 
             var models = _controleArquivoRepository.ListarUsuarios(Session["LoginUsuario"].ToString());
 

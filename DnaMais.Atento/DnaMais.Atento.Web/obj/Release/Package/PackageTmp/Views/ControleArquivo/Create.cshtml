@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Partial("_ElementosCabeçalho")
-
 @using (Html.BeginForm("Create", "ControleArquivo", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -48,7 +46,6 @@
     </div>
 }
 
-
 <p>
     @Html.ActionLink("Voltar", "ListarArquivo", "ControleArquivo", new { @class = "btn btn-primary" })
 </p>
@@ -79,8 +76,6 @@
                 else {
                     $("#pMsg").empty();
                 }
-
-
 
             });
         });

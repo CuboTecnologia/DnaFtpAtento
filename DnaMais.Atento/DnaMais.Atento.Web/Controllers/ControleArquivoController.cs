@@ -24,6 +24,11 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult ListarArquivo()
         {
+            if (Session["LoginUsuario"] == null)
+            {
+                System.Web.Security.FormsAuthentication.RedirectToLoginPage();
+            }
+
             var models = _controleArquivoRepository.GetAll(Session["LoginUsuario"].ToString());
 
             return View(models);
@@ -59,6 +64,10 @@ namespace DnaMais.Atento.Web.Controllers
         [HttpPost]
         public ActionResult Create(HttpPostedFileBase file)
         {
+            if (Session["LoginUsuario"] == null)
+            {
+                System.Web.Security.FormsAuthentication.RedirectToLoginPage();
+            }
 
             ControleArquivoModel model = new ControleArquivoModel();
 
