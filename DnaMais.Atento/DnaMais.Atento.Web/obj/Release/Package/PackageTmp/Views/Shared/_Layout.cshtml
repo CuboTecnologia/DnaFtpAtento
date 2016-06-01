@@ -30,10 +30,10 @@
             <div class="row">
                 <div class="col-lg-12 right">
 
-                    @{if (Session["NomeUsuario"].ToString() == null)
+                    @{if (Session["NomeUsuario"] == null)
                     {
                         TempData["sessionFinalizada"] = "Sessão Finalizada. Efetue o login novamente.";
-                        Response.Redirect("~/Home/Index");
+                        Response.Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
                     }
                     else
                     {

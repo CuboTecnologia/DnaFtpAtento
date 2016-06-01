@@ -63,7 +63,11 @@ namespace DnaMais.Atento.Web.Repositories
                                     LoginSolicitante = reader["DS_LOGIN"].ToString(),
                                     NomeUsuarioSolicitante = reader["NM_USUARIO"].ToString(),
                                     QtdeItensRecebidos = reader["QT_ITENS_RECEBIDOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
-                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"])
+                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"]),
+                                    QtdeEnriquecidoEndereco = reader["QT_ENRIQUECIDO_ENDERECO"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_ENDERECO"]),
+                                    QtdeEnriquecidoFone = reader["QT_ENRIQUECIDO_FONE"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_FONE"]),
+                                    QtdeEnriquecidoCelular = reader["QT_ENRIQUECIDO_CELULAR"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_CELULAR"]),
+                                    QtdeEnriquecidoEmail = reader["QT_ENRIQUECIDO_EMAIL"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_EMAIL"])
                                 });
                             }
                         }
@@ -420,7 +424,11 @@ namespace DnaMais.Atento.Web.Repositories
                                     NomeArquivoDownload = reader["NM_ARQUIVO_DOWNLOAD"].ToString(),
                                     NomeUsuarioSolicitante = reader["NM_USUARIO"].ToString(),
                                     QtdeItensRecebidos = reader["QT_ITENS_RECEBIDOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
-                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"])
+                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"]),
+                                    QtdeEnriquecidoEndereco = reader["QT_ENRIQUECIDO_ENDERECO"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_ENDERECO"]),
+                                    QtdeEnriquecidoFone = reader["QT_ENRIQUECIDO_FONE"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_FONE"]),
+                                    QtdeEnriquecidoCelular = reader["QT_ENRIQUECIDO_CELULAR"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_CELULAR"]),
+                                    QtdeEnriquecidoEmail = reader["QT_ENRIQUECIDO_EMAIL"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_EMAIL"])
                                 });
                             }
                         }

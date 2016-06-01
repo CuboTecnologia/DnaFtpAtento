@@ -80,9 +80,10 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult CriarUsuario()
         {
-            if (Session["LoginUsuario"] == null)
+            if (Session["NomeUsuario"] == null)
             {
-                System.Web.Security.FormsAuthentication.RedirectToLoginPage();
+                TempData["sessionFinalizada"] = "Sessão Finalizada. Efetue o login novamente.";
+                return Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
             }
 
             ViewData["GrupoUsuarioCkl"] = _controleArquivoRepository.GetAllGruposCkl(Session["TipoUsuario"].ToString(), Session["LoginUsuario"].ToString()).ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(), Text = x.Nome });
@@ -169,9 +170,10 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult ListarUsuarios()
         {
-            if (Session["LoginUsuario"] == null)
+            if (Session["NomeUsuario"] == null)
             {
-                System.Web.Security.FormsAuthentication.RedirectToLoginPage();
+                TempData["sessionFinalizada"] = "Sessão Finalizada. Efetue o login novamente.";
+                return Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
             }
 
             var models = _controleArquivoRepository.ListarUsuarios(Session["LoginUsuario"].ToString());
@@ -201,7 +203,7 @@ namespace DnaMais.Atento.Web.Controllers
 
             TempData["updateUser"] = "Usuário Atualizado com Sucesso!";
 
-            return RedirectToAction("ListarUsuarios","Home");
+            return RedirectToAction("ListarUsuarios", "Home");
         }
 
         #endregion

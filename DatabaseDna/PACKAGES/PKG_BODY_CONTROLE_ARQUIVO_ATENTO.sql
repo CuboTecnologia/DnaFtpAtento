@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY PKG_CONTROLE_ARQUIVO_ATENTO
+CREATE OR REPLACE PACKAGE BODY DNA.PKG_CONTROLE_ARQUIVO_ATENTO
 AS
     PROCEDURE ATUALIZAR_STATUS_DOWNLOAD
     (
@@ -19,7 +19,7 @@ AS
             ID_CONTROLE = P_ID_CONTROLE;
         COMMIT;
     END;
-    
+
     PROCEDURE ATUALIZAR_STATUS_IMPORTACAO
     (
         P_ID_CONTROLE        IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE
@@ -34,7 +34,7 @@ AS
             ID_CONTROLE = P_ID_CONTROLE;
         COMMIT;
     END;
-    
+
     PROCEDURE ATUALIZAR_STATUS_EXTRACAO
     (
         P_ID_CONTROLE        IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE
@@ -49,7 +49,7 @@ AS
             ID_CONTROLE = P_ID_CONTROLE;
         COMMIT;
     END;
-    
+
     PROCEDURE ATUALIZAR_STATUS_EXPORTACAO
     (
         P_ID_CONTROLE        IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE
@@ -64,8 +64,26 @@ AS
             ID_CONTROLE = P_ID_CONTROLE;
         COMMIT;
     END;
-    
+
     PROCEDURE ATUALIZAR_STATUS_UPLOAD
+    (
+        P_ID_CONTROLE         IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE,
+        P_NM_ARQUIVO_DOWNLOAD IN CONTROLE_ARQ_ATENTO.NM_ARQUIVO_DOWNLOAD%TYPE
+    )
+    IS
+    BEGIN
+        UPDATE
+            CONTROLE_ARQ_ATENTO
+        SET
+            CD_STATUS_CONTROLE_ARQUIVO = 6,
+            NM_ARQUIVO_DOWNLOAD        = P_NM_ARQUIVO_DOWNLOAD,
+            DT_TERMINO_EXECUCAO        = SYSDATE
+        WHERE
+            ID_CONTROLE = P_ID_CONTROLE;
+        COMMIT;
+    END;
+    
+    PROCEDURE ATUALIZAR_STATUS_ERRO_LAYOUT
     (
         P_ID_CONTROLE        IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE
     )
@@ -74,12 +92,27 @@ AS
         UPDATE
             CONTROLE_ARQ_ATENTO
         SET
-            CD_STATUS_CONTROLE_ARQUIVO = 6
+            CD_STATUS_CONTROLE_ARQUIVO = 99
         WHERE
             ID_CONTROLE = P_ID_CONTROLE;
         COMMIT;
     END;
-    
+
+    PROCEDURE ATUALIZAR_STATUS_EXPURGADO
+    (
+        P_ID_CONTROLE        IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE
+    )
+    IS
+    BEGIN
+        UPDATE
+            CONTROLE_ARQ_ATENTO
+        SET
+            CD_STATUS_CONTROLE_ARQUIVO = 98
+        WHERE
+            ID_CONTROLE = P_ID_CONTROLE;
+        COMMIT;
+    END;
+
     PROCEDURE VERIFICAR_LOGIN_USUARIO
     (
         P_DS_LOGIN        IN USUARIO_ATENTO.DS_LOGIN%TYPE,
@@ -110,7 +143,7 @@ AS
         RETORNO_CONTROLE_ARQUIVO    OUT SYS_REFCURSOR
     )
     IS
-        V_CD_TIPO_USUARIO USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
+        V_CD_TIPO_USUARIO DNA.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
     BEGIN
     
          SELECT
@@ -118,7 +151,7 @@ AS
          INTO
              V_CD_TIPO_USUARIO
          FROM
-             USUARIO_ATENTO  
+             DNA.USUARIO_ATENTO  
          WHERE
              DS_LOGIN = P_DS_LOGIN;
     
@@ -140,6 +173,10 @@ AS
                  ,USUARIO_ATENTO.NM_USUARIO
                  ,QT_ITENS_RECEBIDOS
                  ,QT_ITENS_EXPORTADOS
+                 ,QT_ENRIQUECIDO_ENDERECO
+                 ,QT_ENRIQUECIDO_FONE
+                 ,QT_ENRIQUECIDO_CELULAR
+                 ,QT_ENRIQUECIDO_EMAIL
           FROM
                  CONTROLE_ARQ_ATENTO
           JOIN
@@ -161,10 +198,12 @@ AS
           WHERE
                 (V_CD_TIPO_USUARIO = 'A'
                  OR CONTROLE_ARQ_ATENTO.DS_LOGIN IN (SELECT DISTINCT GRP.DS_LOGIN
-                                                     FROM   USUARIO_ATENTO_GRUPO_USUARIO GRP
-                                                     JOIN   USUARIO_ATENTO USU
+                                                     FROM   DNA.USUARIO_ATENTO_GRUPO_USUARIO GRP
+                                                     JOIN   DNA.USUARIO_ATENTO USU
                                                      ON     USU.DS_LOGIN = GRP.DS_LOGIN
-                                                     WHERE  USU.DS_LOGIN = P_DS_LOGIN));
+                                                     WHERE  USU.DS_LOGIN = P_DS_LOGIN))
+          ORDER BY
+                 ID_CONTROLE DESC;
     END;
     
     PROCEDURE ATUALIZAR_CONTROLE_ARQUIVO
@@ -318,6 +357,10 @@ AS
                  ,NM_USUARIO
                  ,QT_ITENS_RECEBIDOS
                  ,QT_ITENS_EXPORTADOS
+                 ,QT_ENRIQUECIDO_ENDERECO
+                 ,QT_ENRIQUECIDO_FONE
+                 ,QT_ENRIQUECIDO_CELULAR
+                 ,QT_ENRIQUECIDO_EMAIL
           FROM
                  CONTROLE_ARQ_ATENTO
           JOIN
@@ -385,24 +428,23 @@ AS
     END;
     
     PROCEDURE LISTAR_USUARIOS
-  (
-      P_DS_LOGIN        IN  USUARIO_ATENTO.DS_LOGIN%TYPE,
-      RETORNO_USUARIOS  OUT SYS_REFCURSOR
-  )
-  IS
-  BEGIN
+    (
+        P_DS_LOGIN        IN  USUARIO_ATENTO.DS_LOGIN%TYPE,
+        RETORNO_USUARIOS  OUT SYS_REFCURSOR
+    )
+    IS
+    BEGIN
   
-      OPEN
-          RETORNO_USUARIOS
-      FOR
-  
+        OPEN
+            RETORNO_USUARIOS
+        FOR
         SELECT 
-                DS_LOGIN
-                ,NM_USUARIO
-                ,DS_EMAIL
+            DS_LOGIN
+           ,NM_USUARIO
+           ,DS_EMAIL
         FROM 
-                USUARIO_ATENTO;
-  END;
+            USUARIO_ATENTO;
+    END;
   
     PROCEDURE EDITAR_USUARIO
     (
@@ -448,5 +490,4 @@ AS
          COMMIT;
          
     END;
-    
 END;

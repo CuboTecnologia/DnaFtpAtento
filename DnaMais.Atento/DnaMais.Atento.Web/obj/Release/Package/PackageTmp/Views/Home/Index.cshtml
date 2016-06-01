@@ -6,7 +6,7 @@
 
 <hr />
 
-@if (TempData["sessionFinalizada"] == null)
+@if (TempData["sessionFinalizada"] != null)
 {
     <p style="color:red">@TempData["sessionFinalizada"]</p>
 }
