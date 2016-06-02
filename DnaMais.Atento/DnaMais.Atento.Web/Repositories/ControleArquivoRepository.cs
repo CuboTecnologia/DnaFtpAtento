@@ -63,7 +63,11 @@ namespace DnaMais.Atento.Web.Repositories
                                     LoginSolicitante = reader["DS_LOGIN"].ToString(),
                                     NomeUsuarioSolicitante = reader["NM_USUARIO"].ToString(),
                                     QtdeItensRecebidos = reader["QT_ITENS_RECEBIDOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
-                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"])
+                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"]),
+                                    QtdeEnriquecidoEndereco = reader["QT_ENRIQUECIDO_ENDERECO"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_ENDERECO"]),
+                                    QtdeEnriquecidoFone = reader["QT_ENRIQUECIDO_FONE"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_FONE"]),
+                                    QtdeEnriquecidoCelular = reader["QT_ENRIQUECIDO_CELULAR"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_CELULAR"]),
+                                    QtdeEnriquecidoEmail = reader["QT_ENRIQUECIDO_EMAIL"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_EMAIL"])
                                 });
                             }
                         }
@@ -374,51 +378,6 @@ namespace DnaMais.Atento.Web.Repositories
 
         #endregion
 
-        //CRIAR PROC
-        #region Listar Tipo de Usuários
-
-        public IEnumerable<UsuarioModel> GetTipoUsuario()
-        {
-            var tipos = new Collection<UsuarioModel>();
-
-            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
-            {
-                try
-                {
-                    using (var command = conn.CreateCommand())
-                    {
-
-                        string strSQL = "";
-                        strSQL = strSQL + " SELECT CD_TIPO_USUARIO ";
-                        strSQL = strSQL + " FROM USUARIO_ATENTO ";
-
-                        if (conn.State == System.Data.ConnectionState.Closed)
-                            conn.Open();
-
-                        command.CommandText = strSQL;
-
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                tipos.Add(new UsuarioModel
-                                {
-                                    TipoUsuario = reader["CD_TIPO_USUARIO"].ToString(),
-                                });
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    conn.Close();
-                }
-            }
-            return tipos;
-        }
-
-        #endregion
-
         #region Gerar Relatório
 
         public IEnumerable<ControleArquivoModel> GerarRelatorio(int itemCodigo)
@@ -464,8 +423,12 @@ namespace DnaMais.Atento.Web.Repositories
                                     DataTerminoExecucao = reader["DT_TERMINO_EXECUCAO"] != DBNull.Value ? (DateTime?)reader["DT_TERMINO_EXECUCAO"] : null,
                                     NomeArquivoDownload = reader["NM_ARQUIVO_DOWNLOAD"].ToString(),
                                     NomeUsuarioSolicitante = reader["NM_USUARIO"].ToString(),
-                                    QtdeItensRecebidos = Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
-                                    QtdeItensProcessados = Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"])
+                                    QtdeItensRecebidos = reader["QT_ITENS_RECEBIDOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_RECEBIDOS"]),
+                                    QtdeItensProcessados = reader["QT_ITENS_EXPORTADOS"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ITENS_EXPORTADOS"]),
+                                    QtdeEnriquecidoEndereco = reader["QT_ENRIQUECIDO_ENDERECO"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_ENDERECO"]),
+                                    QtdeEnriquecidoFone = reader["QT_ENRIQUECIDO_FONE"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_FONE"]),
+                                    QtdeEnriquecidoCelular = reader["QT_ENRIQUECIDO_CELULAR"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_CELULAR"]),
+                                    QtdeEnriquecidoEmail = reader["QT_ENRIQUECIDO_EMAIL"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QT_ENRIQUECIDO_EMAIL"])
                                 });
                             }
                         }
@@ -509,13 +472,9 @@ namespace DnaMais.Atento.Web.Repositories
                             {
                                 usuarios.Add(new UsuarioModel
                                     {
+                                        Login = reader["DS_LOGIN"].ToString(),
                                         Usuario = reader["NM_USUARIO"].ToString(),
                                         Email = reader["DS_EMAIL"].ToString(),
-                                        Grupos = new GrupoUsuarioModel
-                                        {
-                                            Nome = reader["NM_GRUPO_USUARIO_ATENTO"].ToString()
-                                        }
-                                        
                                     });
                             }
                         }
@@ -533,7 +492,7 @@ namespace DnaMais.Atento.Web.Repositories
 
         #region Editar Usuário
 
-        public UsuarioModel EditarUsuario(string nomeUsuario, string grupoUsuario)
+        public UsuarioModel EditarUsuario(string nomeUsuario, string usuarioLogin)
         {
             var usuario = new UsuarioModel();
 
@@ -549,7 +508,7 @@ namespace DnaMais.Atento.Web.Repositories
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.EDITAR_USUARIO";
                         command.Parameters.Add("P_NM_USUARIO", OracleDbType.Varchar2).Value = nomeUsuario;
-                        command.Parameters.Add("P_NM_GRUPO", OracleDbType.Varchar2).Value = grupoUsuario;
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
                         command.Parameters.Add("RETORNO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
 
                         DataTable dt = new DataTable();
@@ -564,12 +523,9 @@ namespace DnaMais.Atento.Web.Repositories
                                 UsuarioModel objRetorno = new UsuarioModel();
                                 objRetorno.Usuario = dt.Rows[0]["NM_USUARIO"].ToString();
                                 objRetorno.Email = dt.Rows[0]["DS_EMAIL"].ToString();
-                                objRetorno.Grupos = new GrupoUsuarioModel
-                                {
-                                    Nome = dt.Rows[0]["NM_GRUPO_USUARIO_ATENTO"].ToString()
-                                };
-                                    
-                                    
+                                objRetorno.Login = dt.Rows[0]["DS_LOGIN"].ToString();
+
+
                                 return objRetorno;
                             }
                             else
@@ -588,6 +544,41 @@ namespace DnaMais.Atento.Web.Repositories
                     throw ex;
                 }
             }
+        }
+
+        #endregion
+
+        #region Atualizar Usuário
+
+        public void AtualizarUsuario(string novoUsuario, string novoEmail, UsuarioModel model)
+        {
+            
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                using (var command = conn.CreateCommand())
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                        conn.Open();
+
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.ATUALIZAR_USUARIO";
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = model.Login;
+                        command.Parameters.Add("P_NM_NOVO_USUARIO", OracleDbType.Varchar2).Value = novoUsuario;
+                        command.Parameters.Add("P_DS_NOVO_EMAIL", OracleDbType.Varchar2).Value = novoEmail;
+
+                        command.ExecuteNonQuery();
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
+                }
+            }
+            
         }
 
         #endregion

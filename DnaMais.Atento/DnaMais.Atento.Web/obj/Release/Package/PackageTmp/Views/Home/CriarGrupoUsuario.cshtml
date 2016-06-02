@@ -20,6 +20,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Nome, new { @class = "form-control", @id = "txtNome" })
+            <div id="msgNome" style="color:red" class="hidden">Campo Nome Obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -27,6 +28,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Descricao, new { @class = "form-control", @id = "txtDescricao" })
+            <div id="msgDescricao" style="color:red" class="hidden">Digite uma Descrição para o Grupo</div>
         </div>
         <br />
         <div class="editor-field">
@@ -46,6 +48,38 @@
     $(document).ready(function () {
 
         $('#txtNome').focus();
+
+        $('#txtNome').on('blur', function () {
+
+            if ($('#txtNome').val() == "") {
+
+                $('#msgNome').removeClass('hidden');
+                $('#txtNome').focus();
+                return false;
+
+            }
+            else {
+
+                $('#msgNome').addClass('hidden');
+
+            }
+        });
+
+        $('#txtDescricao').on('blur', function () {
+
+            if ($('#txtDescricao').val() == "") {
+
+                $('#msgDescricao').removeClass('hidden');
+                $('#txtDescricao').focus();
+                return false;
+
+            }
+            else {
+
+                $('#msgDescricao').addClass('hidden');
+
+            }
+        });
 
     });
 

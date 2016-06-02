@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Partial("_ElementosCabeçalho")
-
 <hr />
 
 @Html.ActionLink("Voltar para Listagem de Usuários", "ListarUsuarios", "Home", null, new { @class = "btn btn-primary" })
@@ -23,6 +21,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin" })
+            <div id="msgLogin" style="color:red" class="hidden">Campo Login Obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -30,6 +29,7 @@
         </div>
         <div class="editor-field">
             @Html.PasswordFor(model => model.Senha, new { @class = "form-control", @id = "txtSenha" })
+            <div id="msgSenha" style="color:red" class="hidden">Campo Senha Obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -37,6 +37,8 @@
         </div>
         <div class="editor-field">
             @Html.PasswordFor(model => model.ConfirmarSenha, new { @class = "form-control", @id = "txtConfirmarSenha" })
+            <div id="msgConfirmarSenha" style="color:red" class="hidden">Digite sua senha novamente</div>
+            <div id="msgValidarSenha" style="color:red" class="hidden">Campo "Senha" e "Confirmar Senha" estão Diferentes</div>
         </div>
         <br />
         <div class="control-label">
@@ -44,6 +46,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", @id = "txtUsuario" })
+            <div id="msgUsuario" style="color:red" class="hidden">Campo "Nome/Apelido" Obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -51,6 +54,8 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "txtEmail" })
+            <div id="msgEmail" style="color:red" class="hidden">Campo E-Mail Obrigatório</div>
+            <div id="msgValidarEmail" class="hidden" style="color:red">Insira um E-Mail Válido</div>
         </div>
         <br />
         <div class="control-label">
@@ -62,6 +67,7 @@
                 <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" />@item.Text
                 <br />
             }
+            <div id="msgGrupo" style="color:red" class="hidden">Selecione, no mínimo, UM grupo</div>
         </div>
         <br />
         <div class="control-label">
@@ -80,60 +86,124 @@
         <div class="editor-field">
             @Html.RadioButtonFor(model => model.TipoUsuario, "N", new { @id = "rdbN" }) Normal
         </div>
-        <div class="editor-field">
-            @if (TempData["newUserFail"] != null)
-            {
-                <p style="color:red">@TempData["newUserFail"]</p>
-            }
-        </div>
+        <div id="msgTipoUsuario" style="color:red" class="hidden">Selecione um Tipo de Usuário</div>
         <br />
     </fieldset>
     <input type="submit" id="btnNovoUsuario" value="Criar Novo Usuário" class="btn btn-primary" />
 
+
     <script>
 
         $(document).ready(function () {
+
             $("#txtLogin").focus();
 
-            $("#btnNovoUsuario").click(function () {
+            $('#btnNovoUsuario').click(function () {
 
-                var senha = $("#txtSenha").val();
-                var confirmarSenha = $("#txtConfirmarSenha").val();
-                var sEmail = $('#txtEmail').val();
-
-                if ($('#txtLogin').val() == "" || $('#txtSenha').val() == "" || $('#txtUsuario').val() == "") {
-                    alert('Todos os campos são obrigatórios!');
+                if (!$('input:checkbox').is(":checked")) {
+                    $('#msgGrupo').removeClass('hidden');
                     return false;
                 }
-
-                else if (senha != confirmarSenha) {
-
-                    alert('Campo Senha e Confirmar Senha estão Diferentes');
-                    event.preventDefault();
-                    $('#txtSenha').focus();
+                else {
+                    $('#msgGrupo').addClass('hidden');
                 }
 
-                else if (!validateEmail(sEmail)) {
-                    alert('Insira um E-Mail Válido');
-                    event.preventDefault();
-                    $('#txtEmail').focus();
-                }
-
-                else if (!$('checkbox').is(":checked")) {
-                    alert('Selecione um Grupo');
-                    event.preventDefault();
-                }
-
-                else if ($('#rdbA').is(":checked") || $('#rdbM').is(":checked") || $('#rdbN').is(":checked")) {
+                if ($('#rdbA').is(":checked") || $('#rdbM').is(":checked") || $('#rdbN').is(":checked")) {
                     return true;
                 }
                 else {
-                    alert('Selecione um Tipo de Usuário');
-                    event.preventDefault();
+                    $('#msgTipoUsuario').removeClass('hidden');
+                    return false;
                 }
+
             });
 
+            $('#txtLogin').on('blur', function () {
 
+                if ($('#txtLogin').val() == "") {
+                    $('#msgLogin').removeClass('hidden');
+                    $('#txtLogin').focus();
+                    return false;
+                }
+                else {
+                    $('#msgLogin').addClass('hidden');
+                }
+
+            });
+
+            $('#txtSenha').on('blur', function () {
+
+                if ($('#txtSenha').val() == "") {
+                    $('#msgSenha').removeClass('hidden');
+                    $('#txtSenha').focus();
+                    return false;
+                }
+                else {
+                    $('#msgSenha').addClass('hidden');
+                }
+
+            });
+
+            $('#txtConfirmarSenha').on('blur', function () {
+                var senha = $("#txtSenha").val();
+                var confirmarSenha = $("#txtConfirmarSenha").val();
+
+                if ($('#txtConfirmarSenha').val() == "") {
+                    $('#msgConfirmarSenha').removeClass('hidden');
+                    $('#txtConfirmarSenha').focus();
+                    return false;
+                }
+                else {
+                    $('#msgConfirmarSenha').addClass('hidden');
+                }
+
+                if (senha != confirmarSenha) {
+                    $('#msgValidarSenha').removeClass('hidden');
+                    $('#txtConfirmarSenha').focus();
+                    return false;
+                }
+                else {
+                    $('#msgValidarSenha').addClass('hidden');
+                }
+
+            });
+
+            $('#txtUsuario').on('blur', function () {
+
+                if ($('#txtUsuario').val() == "") {
+                    $('#msgUsuario').removeClass('hidden');
+                    $('#txtUsuario').focus();
+                    return false;
+                }
+                else {
+                    $('#msgUsuario').addClass('hidden');
+                }
+
+            });
+
+            $('#txtEmail').on('blur', function () {
+
+                var sEmail = $('#txtEmail').val();
+
+                if ($('#txtEmail').val() == "") {
+                    $('#msgEmail').removeClass('hidden');
+                    $('#txtEmail').focus();
+                    return false;
+                }
+                else {
+                    $('#msgEmail').addClass('hidden');
+                }
+
+                if (!validateEmail(sEmail)) {
+                    $('#msgValidarEmail').removeClass('hidden');
+                    $('#txtEmail').focus();
+                    return false;
+                }
+                else {
+                    $('#msgValidarEmail').addClass('hidden');
+                }
+
+            });
         });
 
     </script>

@@ -6,6 +6,11 @@
 
 <hr />
 
+@if (TempData["updateUser"] != null)
+{
+    <p style="color:#22862c">@TempData["updateUser"]</p>
+}
+
 @Html.ActionLink("Voltar para Listagem de Arquivos", "ListarArquivo", "ControleArquivo", null, new { @class = "btn btn-primary" })
 @Html.ActionLink("Criar Novo Usuário", "CriarUsuario", "Home", null, new { @class = "btn btn-primary" })
 
@@ -19,7 +24,7 @@
             <table id="table" class="table-bordered table-hover table-striped table-condensed" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th>Grupo</th>
+                        <th>Login</th>
                         <th>Usuário</th>
                         <th>E-Mail</th>
                         <th></th>
@@ -31,7 +36,7 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Grupos.Nome)
+                                @Html.DisplayFor(modelItem => item.Login)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Usuario)
@@ -40,7 +45,7 @@
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
                             <td>
-                                @Html.ActionLink("Editar", "EditarUsuarios", "Home", new { usuarioNome = item.Usuario, usuarioGrupo = item.Grupos.Nome }, null)
+                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, null)
                             </td>
                         </tr>
                     }
