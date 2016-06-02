@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY DNAONLINE.PKG_CONTROLE_ARQUIVO_ATENTO
+CREATE OR REPLACE PACKAGE BODY DNA.PKG_CONTROLE_ARQUIVO_ATENTO
 AS
     PROCEDURE ATUALIZAR_STATUS_DOWNLOAD
     (
@@ -98,6 +98,21 @@ AS
         COMMIT;
     END;
 
+    PROCEDURE ATUALIZAR_STATUS_EXPURGADO
+    (
+        P_ID_CONTROLE        IN CONTROLE_ARQ_ATENTO.ID_CONTROLE%TYPE
+    )
+    IS
+    BEGIN
+        UPDATE
+            CONTROLE_ARQ_ATENTO
+        SET
+            CD_STATUS_CONTROLE_ARQUIVO = 98
+        WHERE
+            ID_CONTROLE = P_ID_CONTROLE;
+        COMMIT;
+    END;
+
     PROCEDURE VERIFICAR_LOGIN_USUARIO
     (
         P_DS_LOGIN        IN USUARIO_ATENTO.DS_LOGIN%TYPE,
@@ -128,7 +143,7 @@ AS
         RETORNO_CONTROLE_ARQUIVO    OUT SYS_REFCURSOR
     )
     IS
-        V_CD_TIPO_USUARIO DNAONLINE.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
+        V_CD_TIPO_USUARIO DNA.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
     BEGIN
     
          SELECT
@@ -136,7 +151,7 @@ AS
          INTO
              V_CD_TIPO_USUARIO
          FROM
-             DNAONLINE.USUARIO_ATENTO  
+             DNA.USUARIO_ATENTO  
          WHERE
              DS_LOGIN = P_DS_LOGIN;
     
@@ -158,6 +173,10 @@ AS
                  ,USUARIO_ATENTO.NM_USUARIO
                  ,QT_ITENS_RECEBIDOS
                  ,QT_ITENS_EXPORTADOS
+                 ,QT_ENRIQUECIDO_ENDERECO
+                 ,QT_ENRIQUECIDO_FONE
+                 ,QT_ENRIQUECIDO_CELULAR
+                 ,QT_ENRIQUECIDO_EMAIL
           FROM
                  CONTROLE_ARQ_ATENTO
           JOIN
@@ -179,8 +198,8 @@ AS
           WHERE
                 (V_CD_TIPO_USUARIO = 'A'
                  OR CONTROLE_ARQ_ATENTO.DS_LOGIN IN (SELECT DISTINCT GRP.DS_LOGIN
-                                                     FROM   DNAONLINE.USUARIO_ATENTO_GRUPO_USUARIO GRP
-                                                     JOIN   DNAONLINE.USUARIO_ATENTO USU
+                                                     FROM   DNA.USUARIO_ATENTO_GRUPO_USUARIO GRP
+                                                     JOIN   DNA.USUARIO_ATENTO USU
                                                      ON     USU.DS_LOGIN = GRP.DS_LOGIN
                                                      WHERE  USU.DS_LOGIN = P_DS_LOGIN))
           ORDER BY
@@ -338,6 +357,10 @@ AS
                  ,NM_USUARIO
                  ,QT_ITENS_RECEBIDOS
                  ,QT_ITENS_EXPORTADOS
+                 ,QT_ENRIQUECIDO_ENDERECO
+                 ,QT_ENRIQUECIDO_FONE
+                 ,QT_ENRIQUECIDO_CELULAR
+                 ,QT_ENRIQUECIDO_EMAIL
           FROM
                  CONTROLE_ARQ_ATENTO
           JOIN
@@ -403,48 +426,30 @@ AS
                             DS_LOGIN = P_DS_LOGIN);
          END IF;
     END;
-	
-  PROCEDURE LISTAR_USUARIOS
-  (
-      P_DS_LOGIN        IN  USUARIO_ATENTO.DS_LOGIN%TYPE,
-      RETORNO_USUARIOS  OUT SYS_REFCURSOR
-  )
-  IS
-  BEGIN
+    
+    PROCEDURE LISTAR_USUARIOS
+    (
+        P_DS_LOGIN        IN  USUARIO_ATENTO.DS_LOGIN%TYPE,
+        RETORNO_USUARIOS  OUT SYS_REFCURSOR
+    )
+    IS
+    BEGIN
   
-      OPEN
-          RETORNO_USUARIOS
-      FOR
-  
+        OPEN
+            RETORNO_USUARIOS
+        FOR
         SELECT 
-                NM_USUARIO,
-                DS_EMAIL,
-                NM_GRUPO_USUARIO_ATENTO 
+            DS_LOGIN
+           ,NM_USUARIO
+           ,DS_EMAIL
         FROM 
-                USUARIO_ATENTO
-        JOIN
-                USUARIO_ATENTO_GRUPO_USUARIO
-        ON
-                USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
-        JOIN
-                GRUPO_USUARIO_ATENTO
-        ON
-                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
-        WHERE
-                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO 
-        IN
-          (SELECT 
-                  ID_GRUPO_USUARIO_ATENTO 
-          FROM 
-                  USUARIO_ATENTO_GRUPO_USUARIO 
-          WHERE 
-                  DS_LOGIN = P_DS_LOGIN);
-  END;
+            USUARIO_ATENTO;
+    END;
   
     PROCEDURE EDITAR_USUARIO
     (
         P_NM_USUARIO        IN USUARIO_ATENTO.NM_USUARIO%TYPE,
-        P_NM_GRUPO          IN GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO%TYPE,
+        P_DS_LOGIN          IN USUARIO_ATENTO.DS_LOGIN%TYPE,
         RETORNO_USUARIO     OUT SYS_REFCURSOR
     )
     IS
@@ -455,30 +460,34 @@ AS
     FOR
     
     SELECT 
-                NM_USUARIO,
-                DS_EMAIL,
-                NM_GRUPO_USUARIO_ATENTO 
+                NM_USUARIO
+                ,DS_EMAIL
+                ,DS_LOGIN 
         FROM 
                 USUARIO_ATENTO
-        JOIN
-                USUARIO_ATENTO_GRUPO_USUARIO
-        ON
-                USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
-        JOIN
-                GRUPO_USUARIO_ATENTO
-        ON
-                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
         WHERE
-                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO 
-        IN
-          (SELECT 
-                  ID_GRUPO_USUARIO_ATENTO 
-          FROM 
-                  USUARIO_ATENTO_GRUPO_USUARIO 
-          WHERE 
-                  USUARIO_ATENTO.NM_USUARIO = P_NM_USUARIO)
-          AND
-                  GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO = P_NM_GRUPO;
+                DS_LOGIN = P_DS_LOGIN;
     END;
     
+    PROCEDURE ATUALIZAR_USUARIO
+    (
+        P_DS_LOGIN           IN USUARIO_ATENTO.DS_LOGIN%TYPE,
+        P_NM_NOVO_USUARIO    IN VARCHAR2,
+        P_DS_NOVO_EMAIL      IN VARCHAR2
+    )
+    IS
+    BEGIN
+         
+         UPDATE
+               USUARIO_ATENTO
+         SET
+               NM_USUARIO = P_NM_NOVO_USUARIO,
+               DS_EMAIL = P_DS_NOVO_EMAIL
+         
+         WHERE
+               DS_LOGIN = P_DS_LOGIN;
+               
+         COMMIT;
+         
+    END;
 END;

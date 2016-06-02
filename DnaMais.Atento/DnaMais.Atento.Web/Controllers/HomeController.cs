@@ -54,7 +54,7 @@ namespace DnaMais.Atento.Web.Controllers
             }
             else
             {
-                TempData["logado"] = "Usuário e/ou Senha Incorreto(s)!";
+                TempData["verificarLogin"] = "Usuário e/ou Senha Incorreto(s)!";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -80,6 +80,12 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult CriarUsuario()
         {
+            if (Session["NomeUsuario"] == null)
+            {
+                TempData["sessionFinalizada"] = "Sessão Finalizada. Efetue o login novamente.";
+                return Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
+            }
+
             ViewData["GrupoUsuarioCkl"] = _controleArquivoRepository.GetAllGruposCkl(Session["TipoUsuario"].ToString(), Session["LoginUsuario"].ToString()).ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(), Text = x.Nome });
 
             return View();
@@ -104,8 +110,6 @@ namespace DnaMais.Atento.Web.Controllers
             }
             else
             {
-                TempData["newUserFail"] = "Preencha todos os Campos!";
-
                 return RedirectToAction("CriarUsuario", "Home");
             }
         }
@@ -166,6 +170,11 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult ListarUsuarios()
         {
+            if (Session["NomeUsuario"] == null)
+            {
+                TempData["sessionFinalizada"] = "Sessão Finalizada. Efetue o login novamente.";
+                return Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
+            }
 
             var models = _controleArquivoRepository.ListarUsuarios(Session["LoginUsuario"].ToString());
 
@@ -174,13 +183,27 @@ namespace DnaMais.Atento.Web.Controllers
 
         #endregion
 
-        #region Editar Usuários
+        #region Editar Usuário
 
-        public ActionResult EditarUsuarios(string usuarioNome, string usuarioGrupo)
+        public ActionResult EditarUsuario(string usuarioNome, string usuarioLogin)
         {
-            var models = _controleArquivoRepository.EditarUsuario(usuarioNome, usuarioGrupo);
+            var models = _controleArquivoRepository.EditarUsuario(usuarioNome, usuarioLogin);
 
             return View(models);
+        }
+
+        #endregion
+
+        #region Editar Usuário [HttpPost]
+
+        [HttpPost]
+        public ActionResult EditarUsuario(string txtUsuario, string txtEmail, UsuarioModel model)
+        {
+            _controleArquivoRepository.AtualizarUsuario(txtUsuario, txtEmail, model);
+
+            TempData["updateUser"] = "Usuário Atualizado com Sucesso!";
+
+            return RedirectToAction("ListarUsuarios", "Home");
         }
 
         #endregion
