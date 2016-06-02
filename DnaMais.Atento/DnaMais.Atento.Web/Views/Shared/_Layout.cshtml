@@ -52,7 +52,13 @@
 
                         if (Session["NomeUsuario"].ToString() != null)
                         {
-                            @Html.Label("Logado como  " + Session["NomeUsuario"].ToString())
+                                    <fieldset>
+                                        Logado
+                                        @Html.Label(Session["NomeUsuario"].ToString())
+                                        <br />
+                                        Grupo
+                                        @Html.Label(Session["GrupoUsuario"].ToString())
+                                    </fieldset>
                         }
                     }
                     }

@@ -153,6 +153,10 @@ namespace DnaMais.Atento.Web.Repositories
                                 objRetorno.Login = dt.Rows[0]["DS_LOGIN"].ToString();
                                 objRetorno.Email = dt.Rows[0]["DS_EMAIL"].ToString();
                                 objRetorno.TipoUsuario = dt.Rows[0]["CD_TIPO_USUARIO"].ToString();
+                                objRetorno.Grupos = new GrupoUsuarioModel
+                                {
+                                    Nome = dt.Rows[0]["NM_GRUPO_USUARIO_ATENTO"].ToString()
+                                };
                                 return objRetorno;
                             }
                             else
