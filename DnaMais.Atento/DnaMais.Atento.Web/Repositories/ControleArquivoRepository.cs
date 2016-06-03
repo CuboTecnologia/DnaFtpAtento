@@ -153,6 +153,10 @@ namespace DnaMais.Atento.Web.Repositories
                                 objRetorno.Login = dt.Rows[0]["DS_LOGIN"].ToString();
                                 objRetorno.Email = dt.Rows[0]["DS_EMAIL"].ToString();
                                 objRetorno.TipoUsuario = dt.Rows[0]["CD_TIPO_USUARIO"].ToString();
+                                objRetorno.Grupos = new GrupoUsuarioModel
+                                {
+                                    Nome = dt.Rows[0]["NM_GRUPO_USUARIO_ATENTO"].ToString()
+                                };
                                 return objRetorno;
                             }
                             else
@@ -475,6 +479,11 @@ namespace DnaMais.Atento.Web.Repositories
                                         Login = reader["DS_LOGIN"].ToString(),
                                         Usuario = reader["NM_USUARIO"].ToString(),
                                         Email = reader["DS_EMAIL"].ToString(),
+
+                                        Grupos = new GrupoUsuarioModel
+                                        {
+                                            Nome = reader["NM_GRUPO_USUARIO_ATENTO"].ToString(),
+                                        }
                                     });
                             }
                         }
@@ -579,6 +588,58 @@ namespace DnaMais.Atento.Web.Repositories
                 }
             }
             
+        }
+
+        #endregion
+
+        #region Listar Membros do Grupo
+
+        public IEnumerable<UsuarioModel> ListarMembrosGrupo(int codigoGrupo)
+        {
+            var membros = new Collection<UsuarioModel>();
+
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                using (var command = conn.CreateCommand())
+                {
+                    try
+                    {
+                        if (conn.State == System.Data.ConnectionState.Closed)
+                            conn.Open();
+
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.LISTAR_MEMBROS_GRUPO";
+                        command.Parameters.Add("P_ID_GRUPO", OracleDbType.Int32).Value = codigoGrupo;
+                        command.Parameters.Add("RETORNO_GRUPO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                        command.ExecuteNonQuery();
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                membros.Add(new UsuarioModel
+                                    {
+                                        Login = reader["DS_LOGIN"].ToString(),
+                                        Usuario = reader["NM_USUARIO"].ToString(),
+                                        Email = reader["DS_EMAIL"].ToString(),
+
+                                        Grupos = new GrupoUsuarioModel
+                                        {
+                                            Nome = reader["NM_GRUPO_USUARIO_ATENTO"].ToString(),
+                                            Descricao = reader["DS_GRUPO_USUARIO_ATENTO"].ToString(),
+                                        }
+                                    });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+            return membros;
         }
 
         #endregion
