@@ -91,6 +91,8 @@ F:\DnaFtp\DnaMais.Atento\DnaMais.Atento.Web\bin\System.Web.WebPages.Razor.xml
 F:\DnaFtp\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.csprojResolveAssemblyReference.cache
 F:\DnaFtp\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.dll
 F:\DnaFtp\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.pdb
+C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.dll
+C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.pdb
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\DnaMais.Atento.Web.dll.config
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\DnaMais.Atento.Web.dll
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\DnaMais.Atento.Web.pdb
@@ -119,6 +121,4 @@ C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\System
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\System.Web.WebPages.xml
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\System.Web.WebPages.Deployment.xml
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\bin\System.Web.WebPages.Razor.xml
-C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.dll
-C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.pdb
 C:\GitHub\Projects\DNA\DnaFtpAtento\DnaMais.Atento\DnaMais.Atento.Web\obj\Debug\DnaMais.Atento.Web.csprojResolveAssemblyReference.cache

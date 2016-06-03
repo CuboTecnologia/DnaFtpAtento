@@ -27,6 +27,7 @@
                         <th>Login</th>
                         <th>Usuário</th>
                         <th>E-Mail</th>
+                        <th>Grupo</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -45,7 +46,10 @@
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
                             <td>
-                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, null)
+                                @Html.DisplayFor(modelItem => item.Grupos.Nome)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar" })
                             </td>
                         </tr>
                     }
@@ -53,5 +57,35 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        
+            <div class="modal" id="modalTest">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">dadasdas</div>
+                        <div class="modal-body">...</div>
+                        <div class="modal-footer">...</div>
+                    </div>
+                </div>
+            </div>
+
+        <button class="btn" data-toggle="modal" data-target="#modalTest">
+            Show my modal
+        </button>
+        
+
+        </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#lnkEditar').click(function () {
+
+            $('#modalTest').modal('toggle');
+
+        });
+
+    });
+
+</script>
