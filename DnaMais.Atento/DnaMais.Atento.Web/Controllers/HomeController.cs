@@ -47,6 +47,7 @@ namespace DnaMais.Atento.Web.Controllers
                 Session.Add("LoginUsuario", usuarioRetorno.Login);
                 Session.Add("EmailUsuario", usuarioRetorno.Email);
                 Session.Add("TipoUsuario", usuarioRetorno.TipoUsuario);
+                Session.Add("GrupoUsuario", usuarioRetorno.Grupos.Nome);
 
                 FormsAuthentication.SetAuthCookie(usuario.Login, false);
 
@@ -204,6 +205,18 @@ namespace DnaMais.Atento.Web.Controllers
             TempData["updateUser"] = "Usuário Atualizado com Sucesso!";
 
             return RedirectToAction("ListarUsuarios", "Home");
+        }
+
+        #endregion
+
+        #region Detalhar Grupo
+
+        public ActionResult DetalharGrupo(int codigoGrupo, string nomeGrupo)
+        {
+            var models = _controleArquivoRepository.ListarMembrosGrupo(codigoGrupo);
+
+            ViewBag.nomeGrupo = nomeGrupo;
+            return View(models);
         }
 
         #endregion

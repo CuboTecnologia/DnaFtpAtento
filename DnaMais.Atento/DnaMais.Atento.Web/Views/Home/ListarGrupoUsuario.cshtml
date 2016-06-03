@@ -26,7 +26,7 @@
                     @Html.ActionLink("Criar Novo Grupo", "CriarGrupoUsuario", "Home", null, new { @class = "btn btn-primary" })
                 </p>
                 <div class="panel panel-default">
-                    <div class="panel-heading"><h2>Lista de Grupo de Usuários</h2></div>
+                    <div class="panel-heading"><h2>Grupos de Usuário</h2></div>
                     <div class="panel-body">
                         <table id="table" class="display" cellspacing="0" width="100%">
                             <thead>
@@ -34,6 +34,7 @@
                                     <th>Código</th>
                                     <th>Nome do Grupo</th>
                                     <th>Descrição</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,10 +46,15 @@
                                             @Html.DisplayFor(modelItem => item.Codigo)
                                         </td>
                                         <td class="col-md-6">
-                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.ActionLink(item.Nome.ToString(), "DetalharGrupo", "Home", new { codigoGrupo = item.Codigo, nomeGrupo = item.Nome }, null)
                                         </td>
                                         <td class="col-md-5">
                                             @Html.DisplayFor(modelItem => item.Descricao)
+                                        </td>
+                                        <td nowrap>
+                                            @Html.ActionLink("Editar","EditarGrupoUsuario","Home")
+                                            <label> | </label>
+                                            @Html.ActionLink("Excluir", "ExcluirGrupoUsuario", "Home")
                                         </td>
                                     </tr>
                                 }
