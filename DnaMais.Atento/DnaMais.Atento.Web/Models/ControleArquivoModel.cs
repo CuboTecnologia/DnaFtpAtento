@@ -75,5 +75,9 @@ namespace DnaMais.Atento.Web.Models
         public int QtdeItensRecebidos { get; set; }
 
         public int QtdeItensProcessados { get; set; }
+        public int QtdeEnriquecidoEndereco { get; set; }
+        public int QtdeEnriquecidoFone { get; set; }
+        public int QtdeEnriquecidoCelular { get; set; }
+        public int QtdeEnriquecidoEmail { get; set; }
     }
 }

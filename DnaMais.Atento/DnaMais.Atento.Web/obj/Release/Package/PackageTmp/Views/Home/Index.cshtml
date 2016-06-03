@@ -6,7 +6,7 @@
 
 <hr />
 
-@if (TempData["sessionFinalizada"] == null)
+@if (TempData["sessionFinalizada"] != null)
 {
     <p style="color:red">@TempData["sessionFinalizada"]</p>
 }
@@ -20,6 +20,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin"  })
+            <div id="msgLogin" style="color: red" class="hidden">Insira um Login</div>
         </div>
         <br />
         <div class="control-label">
@@ -27,12 +28,14 @@
         </div>
         <div class="editor-field">
             @Html.PasswordFor(model => model.Senha, new { @class = "form-control", @id = "txtSenha" })
+            <div id="msgSenha" style="color: red" class="hidden">Insira uma Senha</div>
+            @if(TempData["verificarLogin"] != null)
+            {
+                <p style="color:red">@TempData["verificarLogin"]</p>
+            }
         </div>
         <div class="editor-field">
-            @if (TempData["logado"] != null)
-            {
-                <p style="color:red">@TempData["logado"]</p>
-            }
+           
         </div>
     </fieldset>
     <br />
@@ -41,21 +44,51 @@
     <script>
 
         $(document).ready(function () {
+
             $("#txtLogin").focus();
 
-            $("#btnAcessar").click(function () {
+            $('#txtLogin').on('blur', function () {
 
-                var login = $("#txtLogin").val();
-                
-                var senha = $("#txtSenha").val();
-
-                if (login == "" || senha == "") {
-                    alert("Preencha os campos corretamente!")
-                    
+                if($('#txtLogin').val() == "")
+                {
+                    $('#msgLogin').removeClass('hidden');
+                    $('#txtLogin').focus();
+                    return false;
+                }
+                else
+                {
+                    $('#msgLogin').addClass('hidden');
                 }
 
-
             });
+
+            $('#txtSenha').on('blur', function () {
+
+                if($('#txtSenha').val() == "")
+                {
+                    $('#msgSenha').removeClass('hidden');
+                    $('#txtSenha').focus();
+                    return false;
+                }
+                else
+                {
+                    $('#msgSenha').addClass('hidden');
+                }
+            });
+
+            //$("#btnAcessar").click(function () {
+
+            //    var login = $("#txtLogin").val();
+                
+            //    var senha = $("#txtSenha").val();
+
+            //    if (login == "" || senha == "") {
+            //        alert("Preencha os campos corretamente!")
+                    
+            //    }
+
+
+            //});
 
         });
 

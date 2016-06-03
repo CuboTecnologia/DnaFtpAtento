@@ -221,7 +221,7 @@
     <Content Include="Views\Shared\_DataTableScriptListarArquivo.cshtml" />
     <Content Include="Views\ControleArquivo\ExibirRelatorio.cshtml" />
     <Content Include="Views\Home\ListarUsuarios.cshtml" />
-    <Content Include="Views\Home\EditarUsuarios.cshtml" />
+    <Content Include="Views\Home\EditarUsuario.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
