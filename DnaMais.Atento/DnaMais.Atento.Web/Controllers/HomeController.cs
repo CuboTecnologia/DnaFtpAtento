@@ -209,5 +209,17 @@ namespace DnaMais.Atento.Web.Controllers
 
         #endregion
 
+        #region Detalhar Grupo
+
+        public ActionResult DetalharGrupo(int codigoGrupo, string nomeGrupo)
+        {
+            var models = _controleArquivoRepository.ListarMembrosGrupo(codigoGrupo);
+
+            ViewBag.nomeGrupo = nomeGrupo;
+            return View(models);
+        }
+
+        #endregion
+
     }
 }

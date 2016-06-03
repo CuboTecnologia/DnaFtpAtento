@@ -42,7 +42,7 @@
 
                         if (Session["TipoUsuario"].ToString() == "A" || Session["TipoUsuario"].ToString() == "M")
                         {
-                            @Html.ActionLink("Grupo de Usuário", "ListarGrupoUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
+                            @Html.ActionLink("Gerenciar Grupos", "ListarGrupoUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
                             @Html.ActionLink("Gerenciar Usuários", "ListarUsuarios", "Home", new { area = "" }, new { @class = "btn btn-menu" })
                         }
 
@@ -53,7 +53,7 @@
                         if (Session["NomeUsuario"].ToString() != null)
                         {
                                     <fieldset>
-                                        Logado
+                                        Logado como 
                                         @Html.Label(Session["NomeUsuario"].ToString())
                                         <br />
                                         Grupo
