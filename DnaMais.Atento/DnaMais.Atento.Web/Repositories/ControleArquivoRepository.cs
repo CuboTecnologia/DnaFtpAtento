@@ -727,5 +727,72 @@ namespace DnaMais.Atento.Web.Repositories
 
         #endregion
 
+        #region Verificar Usuário Controle
+
+        public bool VerificarUsuarioControle(string usuarioLogin)
+        {
+
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                if (conn.State == System.Data.ConnectionState.Closed)
+                    conn.Open();
+
+                using (var command = conn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.VERIFICAR_USUARIO_CONTROLE";
+                    command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
+                    command.Parameters.Add("RETORNO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                    DataTable dt = new DataTable();
+
+                    OracleDataReader reader = command.ExecuteReader();
+
+                    dt.Load(reader);
+
+                    if(dt.Rows.Count != 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        #endregion
+
+        #region Deletar Usuário
+
+        public void DeletarUsuario(string usuarioLogin)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                try
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                        conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.DELETAR_USUARIO";
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        #endregion
+
     }
 }

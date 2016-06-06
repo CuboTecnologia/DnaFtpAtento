@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DnaMais.Atento.Web.Models;
 using System.Web.Security;
 using DnaMais.Atento.Web.Repositories;
+using System.Net;
 
 
 namespace DnaMais.Atento.Web.Controllers
@@ -246,10 +247,26 @@ namespace DnaMais.Atento.Web.Controllers
 
         #endregion
 
-        public ActionResult ExcluirGrupo(string nome, int codigo)
+        #region Deletar Usuário
+
+        [HttpPost]
+        public ActionResult DeletarUsuario(string usuarioLogin)
         {
-           return RedirectToAction("EditarGrupo", "Home");
+            bool getUser = _controleArquivoRepository.VerificarUsuarioControle(usuarioLogin);
+
+            if (getUser == true)
+            {
+                Response.StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                _controleArquivoRepository.DeletarUsuario(usuarioLogin);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
         }
+
+        #endregion
 
     }
 }

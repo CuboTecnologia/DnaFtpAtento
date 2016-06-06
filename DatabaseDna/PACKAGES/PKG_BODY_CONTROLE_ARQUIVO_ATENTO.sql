@@ -596,5 +596,48 @@ AS
          COMMIT;
          
     END;
+	
+	PROCEDURE VERIFICAR_USUARIO_CONTROLE
+    (
+        P_DS_LOGIN           IN   CONTROLE_ARQ_ATENTO.DS_LOGIN%TYPE,
+        RETORNO_USUARIO      OUT  SYS_REFCURSOR
+    )
+    IS 
+    BEGIN
+         OPEN
+             RETORNO_USUARIO
+         FOR
+         
+         SELECT 
+               DS_LOGIN
+         FROM
+               CONTROLE_ARQ_ATENTO CAA
+         WHERE
+               DS_LOGIN = P_DS_LOGIN;
+    END;
+    
+    
+    PROCEDURE DELETAR_USUARIO
+    (
+        P_DS_LOGIN           IN USUARIO_ATENTO.DS_LOGIN%TYPE
+    )
+    
+    IS
+    BEGIN
+    
+          DELETE FROM
+                     USUARIO_ATENTO_GRUPO_USUARIO UAGU
+          WHERE
+                     UAGU.DS_LOGIN = P_DS_LOGIN;
+          COMMIT;
+          
+                     
+          DELETE FROM
+                     USUARIO_ATENTO UA
+          WHERE
+                     UA.DS_LOGIN = P_DS_LOGIN;
+          COMMIT;
+          
+    END;
     
 END;

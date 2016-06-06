@@ -51,10 +51,15 @@
                             <td nowrap>
                                 @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar", @class = "editarUsuario" })
                                 <label> | </label>
-                                @Html.ActionLink("Excluir", "ExcluirUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+                                @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
                             </td>
                         </tr>
                     }
+                    <tr>
+                        <td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="usuarioExcluido" hidden="hidden">
+                            Usuário excluído com sucesso.
+                        </td>
+                    </tr>
 
                 </tbody>
             </table>
@@ -68,8 +73,16 @@
 </div>
 
 <script>
-
+    
     $(document).ready(function () {
+
+        var excluirClick;
+
+        $(".excluirUsuario").click(function (event) {
+            $("#dialog").dialog("open");
+            excluirClick = $(this);
+            event.preventDefault();
+        });
 
         $("#dialog").dialog({
             autoOpen: false,
@@ -79,20 +92,41 @@
                     text: "Confirmar",
                     click: function () {
 
+                        $.ajax({
+                            type: "POST",
+                            url: $(excluirClick).attr('href'),
+                            datatype: 'json',
+                            crossDomain: true,
+
+                            success: function (data) {
+
+                                $(excluirClick).closest('tr').fadeOut(500);
+
+                                setTimeout(function () {
+                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="usuarioExcluido">Usuário excluído com sucesso.</td></tr>');
+                                    $('#usuarioExcluido').delay(1000).fadeOut(500);
+                                }, 500);
+                            },
+                            error: function () {
+
+                                alert('O usuário não pôde ser excluído!');
+
+                            }
+
+                        });
+
+                        $(this).dialog("close");
                     }
                 },
                 {
                     text: "Cancelar",
                     click: function () {
+
                         $(this).dialog("close");
+
                     }
                 }
             ]
-        });
-
-        $(".excluirUsuario").click(function (event) {
-            $("#dialog").dialog("open");
-            event.preventDefault();
         });
 
     });

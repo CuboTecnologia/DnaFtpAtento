@@ -73,9 +73,11 @@
     $(document).ready(function () {
 
 
+        var excluirClick;
 
         $(".excluirGrupo").click(function (event) {
             $("#dialog").dialog("open");
+            excluirClick = $(this);
             event.preventDefault();
         });
 
@@ -86,13 +88,18 @@
                 {
                     text: "Confirmar",
                     click: function () {
-                        return true;
+
+                        //alert($(".excluirGrupo").attr("href"));
+                        $(excluirClick).closest('tr').fadeOut(500);
+
                     }
                 },
                 {
                     text: "Cancelar",
                     click: function () {
+
                         $(this).dialog("close");
+
                     }
                 }
             ]
