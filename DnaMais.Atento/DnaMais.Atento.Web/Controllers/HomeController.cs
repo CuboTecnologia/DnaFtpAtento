@@ -221,5 +221,35 @@ namespace DnaMais.Atento.Web.Controllers
 
         #endregion
 
+        #region Editar Grupo
+
+        public ActionResult EditarGrupo(string nomeGrupo, int codigoGrupo)
+        {
+            var models = _controleArquivoRepository.EditarGrupo(nomeGrupo, codigoGrupo);
+
+            return View(models);
+        }
+
+        #endregion
+
+        #region Editar Grupo [HttpPost]
+
+        [HttpPost]
+        public ActionResult EditarGrupo(string txtGrupo, string txtDescricao, GrupoUsuarioModel model)
+        {
+            _controleArquivoRepository.AtualizarGrupo(txtGrupo, txtDescricao, model);
+
+            TempData["updateGroup"] = "Grupo Atualizado com Sucesso!";
+
+            return RedirectToAction("ListarGrupoUsuario", "Home");
+        }
+
+        #endregion
+
+        public ActionResult ExcluirGrupo(string nome, int codigo)
+        {
+           return RedirectToAction("EditarGrupo", "Home");
+        }
+
     }
 }
