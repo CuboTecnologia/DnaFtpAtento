@@ -20,7 +20,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading"><h2>Usuários Cadastrados</h2></div>
-       
+
             <table id="table" class="table-bordered table-hover table-striped table-condensed" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -48,8 +48,10 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Grupos.Nome)
                             </td>
-                            <td>
-                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar" })
+                            <td nowrap>
+                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar", @class = "editarUsuario" })
+                                <label> | </label>
+                                @Html.ActionLink("Excluir", "ExcluirUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
                             </td>
                         </tr>
                     }
@@ -57,33 +59,40 @@
                 </tbody>
             </table>
         </div>
-        
-            <div class="modal" id="modalTest">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">dadasdas</div>
-                        <div class="modal-body">...</div>
-                        <div class="modal-footer">...</div>
-                    </div>
-                </div>
-            </div>
+    </div>
+</div>
 
-        <button class="btn" data-toggle="modal" data-target="#modalTest">
-            Show my modal
-        </button>
-        
-
-        </div>
+<div id="dialog" title="Atenção!">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>
+    <p>Tem certeza que deseja excluir este usuário?</p>
 </div>
 
 <script>
 
     $(document).ready(function () {
 
-        $('#lnkEditar').click(function () {
+        $("#dialog").dialog({
+            autoOpen: false,
+            width: 400,
+            buttons: [
+                {
+                    text: "Confirmar",
+                    click: function () {
 
-            $('#modalTest').modal('toggle');
+                    }
+                },
+                {
+                    text: "Cancelar",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
 
+        $(".excluirUsuario").click(function (event) {
+            $("#dialog").dialog("open");
+            event.preventDefault();
         });
 
     });
