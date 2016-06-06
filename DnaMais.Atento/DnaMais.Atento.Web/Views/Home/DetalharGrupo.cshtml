@@ -21,6 +21,7 @@
                         <th>Login</th>
                         <th>Usuário</th>
                         <th>E-Mail</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,14 +41,18 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Email)
                                 </td>
-
+                                <td nowrap>
+                                    @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar", @class = "editarUsuario" })
+                                    <label> | </label>
+                                    @Html.ActionLink("Excluir", "ExcluirUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+                                </td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                                 <p>Não existem membros cadastrados no grupo <strong>@ViewBag.nomeGrupo</strong></p>
                             </td>
                         </tr>

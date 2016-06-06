@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY DNA.PKG_CONTROLE_ARQUIVO_ATENTO
+create or replace PACKAGE BODY PKG_CONTROLE_ARQUIVO_ATENTO
 AS
     PROCEDURE ATUALIZAR_STATUS_DOWNLOAD
     (
@@ -123,18 +123,29 @@ AS
     BEGIN
          OPEN RETORNO_LOGIN FOR
          
-               SELECT  DS_LOGIN
-                      ,DS_SENHA
-                      ,DS_CONFIRMACAO_SENHA
-                      ,NM_USUARIO
-                      ,DS_EMAIL
-                      ,CD_TIPO_USUARIO
-               FROM 
-                      USUARIO_ATENTO
-               WHERE 
-                      DS_LOGIN = P_DS_LOGIN
-               AND 
-                      DS_SENHA = P_DS_SENHA;
+          SELECT  
+                USUARIO_ATENTO.DS_LOGIN
+                ,DS_SENHA
+                ,DS_CONFIRMACAO_SENHA
+                ,NM_USUARIO
+                ,DS_EMAIL
+                ,CD_TIPO_USUARIO
+                ,NM_GRUPO_USUARIO_ATENTO
+          FROM 
+                USUARIO_ATENTO
+          JOIN
+                USUARIO_ATENTO_GRUPO_USUARIO
+          ON
+                USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
+          JOIN
+                GRUPO_USUARIO_ATENTO
+          ON
+                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
+          WHERE 
+                USUARIO_ATENTO.DS_LOGIN = P_DS_LOGIN
+          AND 
+                DS_SENHA = P_DS_SENHA;
+      
     END;
     
     PROCEDURE LISTAR_CONTROLE_ARQUIVO
@@ -143,7 +154,7 @@ AS
         RETORNO_CONTROLE_ARQUIVO    OUT SYS_REFCURSOR
     )
     IS
-        V_CD_TIPO_USUARIO DNA.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
+        V_CD_TIPO_USUARIO DNAONLINE.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
     BEGIN
     
          SELECT
@@ -151,7 +162,7 @@ AS
          INTO
              V_CD_TIPO_USUARIO
          FROM
-             DNA.USUARIO_ATENTO  
+             DNAONLINE.USUARIO_ATENTO  
          WHERE
              DS_LOGIN = P_DS_LOGIN;
     
@@ -198,8 +209,8 @@ AS
           WHERE
                 (V_CD_TIPO_USUARIO = 'A'
                  OR CONTROLE_ARQ_ATENTO.DS_LOGIN IN (SELECT DISTINCT GRP.DS_LOGIN
-                                                     FROM   DNA.USUARIO_ATENTO_GRUPO_USUARIO GRP
-                                                     JOIN   DNA.USUARIO_ATENTO USU
+                                                     FROM   DNAONLINE.USUARIO_ATENTO_GRUPO_USUARIO GRP
+                                                     JOIN   DNAONLINE.USUARIO_ATENTO USU
                                                      ON     USU.DS_LOGIN = GRP.DS_LOGIN
                                                      WHERE  USU.DS_LOGIN = P_DS_LOGIN))
           ORDER BY
@@ -434,16 +445,34 @@ AS
     )
     IS
     BEGIN
-  
-        OPEN
-            RETORNO_USUARIOS
-        FOR
-        SELECT 
-            DS_LOGIN
-           ,NM_USUARIO
-           ,DS_EMAIL
-        FROM 
-            USUARIO_ATENTO;
+         
+         OPEN 
+              RETORNO_USUARIOS
+         FOR
+        
+          SELECT 
+              USUARIO_ATENTO.DS_LOGIN
+             ,USUARIO_ATENTO.NM_USUARIO
+             ,USUARIO_ATENTO.DS_EMAIL
+             ,GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO
+          FROM 
+              USUARIO_ATENTO
+          JOIN
+              USUARIO_ATENTO_GRUPO_USUARIO
+          ON
+              USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
+          JOIN
+              GRUPO_USUARIO_ATENTO
+          ON
+              GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
+          WHERE
+              USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO IN (SELECT G.ID_GRUPO_USUARIO_ATENTO
+                                                                            FROM USUARIO_ATENTO_GRUPO_USUARIO A,
+                                                                                 GRUPO_USUARIO_ATENTO         G
+                                                                           WHERE A.ID_GRUPO_USUARIO_ATENTO = G.ID_GRUPO_USUARIO_ATENTO
+                                                                             AND A.DS_LOGIN = P_DS_LOGIN)                                         
+          ORDER BY USUARIO_ATENTO.DS_LOGIN;
+     
     END;
   
     PROCEDURE EDITAR_USUARIO
@@ -490,4 +519,125 @@ AS
          COMMIT;
          
     END;
+    
+    PROCEDURE LISTAR_MEMBROS_GRUPO
+    (
+        P_ID_GRUPO           IN GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO%TYPE,
+        RETORNO_GRUPO        OUT SYS_REFCURSOR
+    )
+    IS
+    BEGIN
+    
+          OPEN
+              RETORNO_GRUPO
+          FOR
+          
+          SELECT
+                GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO
+                ,GRUPO_USUARIO_ATENTO.DS_GRUPO_USUARIO_ATENTO
+                ,USUARIO_ATENTO.DS_LOGIN
+                ,USUARIO_ATENTO.NM_USUARIO
+                ,USUARIO_ATENTO.DS_EMAIL
+          FROM
+                GRUPO_USUARIO_ATENTO
+          JOIN
+                USUARIO_ATENTO_GRUPO_USUARIO
+          ON
+                USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO = GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO
+          JOIN 
+                USUARIO_ATENTO
+          ON
+                USUARIO_ATENTO.DS_LOGIN = USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN
+          WHERE
+                GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = P_ID_GRUPO;
+    END;    
+    
+    PROCEDURE EDITAR_GRUPO
+    (
+        P_NM_GRUPO          IN GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO%TYPE,
+        P_ID_GRUPO          IN GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO%TYPE,
+        RETORNO_GRUPO       OUT SYS_REFCURSOR
+    )
+    IS
+    BEGIN
+    
+    OPEN
+          RETORNO_GRUPO
+    FOR
+    
+    SELECT 
+            NM_GRUPO_USUARIO_ATENTO
+            ,DS_GRUPO_USUARIO_ATENTO
+            ,ID_GRUPO_USUARIO_ATENTO
+    FROM 
+            GRUPO_USUARIO_ATENTO
+    WHERE
+            ID_GRUPO_USUARIO_ATENTO = P_ID_GRUPO;
+    END;
+    
+    PROCEDURE ATUALIZAR_GRUPO
+    (
+        P_ID_GRUPO           IN GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO%TYPE,
+        P_NM_NOVO_GRUPO      IN VARCHAR2,
+        P_DS_NOVA_DESCRICAO  IN VARCHAR2
+    )
+    IS
+    BEGIN
+         
+         UPDATE
+               GRUPO_USUARIO_ATENTO
+         SET
+               NM_GRUPO_USUARIO_ATENTO = P_NM_NOVO_GRUPO,
+               DS_GRUPO_USUARIO_ATENTO = P_DS_NOVA_DESCRICAO
+         
+         WHERE
+               ID_GRUPO_USUARIO_ATENTO = P_ID_GRUPO;
+               
+         COMMIT;
+         
+    END;
+	
+	PROCEDURE VERIFICAR_USUARIO_CONTROLE
+    (
+        P_DS_LOGIN           IN   CONTROLE_ARQ_ATENTO.DS_LOGIN%TYPE,
+        RETORNO_USUARIO      OUT  SYS_REFCURSOR
+    )
+    IS 
+    BEGIN
+         OPEN
+             RETORNO_USUARIO
+         FOR
+         
+         SELECT 
+               DS_LOGIN
+         FROM
+               CONTROLE_ARQ_ATENTO CAA
+         WHERE
+               DS_LOGIN = P_DS_LOGIN;
+    END;
+    
+    
+    PROCEDURE DELETAR_USUARIO
+    (
+        P_DS_LOGIN           IN USUARIO_ATENTO.DS_LOGIN%TYPE
+    )
+    
+    IS
+    BEGIN
+    
+          DELETE FROM
+                     USUARIO_ATENTO_GRUPO_USUARIO UAGU
+          WHERE
+                     UAGU.DS_LOGIN = P_DS_LOGIN;
+          COMMIT;
+          
+                     
+          DELETE FROM
+                     USUARIO_ATENTO UA
+          WHERE
+                     UA.DS_LOGIN = P_DS_LOGIN;
+          COMMIT;
+          
+    END;
+    
 END;

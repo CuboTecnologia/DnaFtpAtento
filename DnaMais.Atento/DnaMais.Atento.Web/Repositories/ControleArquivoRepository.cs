@@ -534,7 +534,6 @@ namespace DnaMais.Atento.Web.Repositories
                                 objRetorno.Email = dt.Rows[0]["DS_EMAIL"].ToString();
                                 objRetorno.Login = dt.Rows[0]["DS_LOGIN"].ToString();
 
-
                                 return objRetorno;
                             }
                             else
@@ -561,16 +560,16 @@ namespace DnaMais.Atento.Web.Repositories
 
         public void AtualizarUsuario(string novoUsuario, string novoEmail, UsuarioModel model)
         {
-            
+
             using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
             {
-                using (var command = conn.CreateCommand())
+                try
                 {
-                    if (conn.State == System.Data.ConnectionState.Closed)
-                        conn.Open();
-
-                    try
+                    using (var command = conn.CreateCommand())
                     {
+                        if (conn.State == System.Data.ConnectionState.Closed)
+                            conn.Open();
+
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.ATUALIZAR_USUARIO";
                         command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = model.Login;
@@ -578,16 +577,14 @@ namespace DnaMais.Atento.Web.Repositories
                         command.Parameters.Add("P_DS_NOVO_EMAIL", OracleDbType.Varchar2).Value = novoEmail;
 
                         command.ExecuteNonQuery();
-
-                    }
-                    catch (Exception ex)
-                    {
-
-                        throw ex;
                     }
                 }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
             }
-            
         }
 
         #endregion
@@ -640,6 +637,159 @@ namespace DnaMais.Atento.Web.Repositories
                 }
             }
             return membros;
+        }
+
+        #endregion
+
+        #region Editar Grupo
+
+        public GrupoUsuarioModel EditarGrupo(string nomeGrupo, int codigoGrupo)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                try
+                {
+                    using (var command = conn.CreateCommand())
+                    {
+                        if (conn.State == System.Data.ConnectionState.Closed)
+                            conn.Open();
+
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.EDITAR_GRUPO";
+                        command.Parameters.Add("NM_GRUPO_USUARIO_ATENTO", OracleDbType.Varchar2).Value = nomeGrupo;
+                        command.Parameters.Add("DS_GRUPO_USUARIO_ATENTO", OracleDbType.Int32).Value = codigoGrupo;
+                        command.Parameters.Add("RETORNO_GRUPO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                        DataTable dt = new DataTable();
+
+                        OracleDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            dt.Load(reader);
+                            if (dt.Rows.Count == 1)
+                            {
+                                GrupoUsuarioModel objRetorno = new GrupoUsuarioModel();
+                                objRetorno.Codigo = Convert.ToInt32(dt.Rows[0]["ID_GRUPO_USUARIO_ATENTO"]);
+                                objRetorno.Nome = dt.Rows[0]["NM_GRUPO_USUARIO_ATENTO"].ToString();
+                                objRetorno.Descricao = dt.Rows[0]["DS_GRUPO_USUARIO_ATENTO"].ToString();
+
+                                return objRetorno;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Atualizar Grupo
+
+        public void AtualizarGrupo (string novoGrupo, string novaDescricao, GrupoUsuarioModel model)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                try
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                        conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.ATUALIZAR_GRUPO";
+                        command.Parameters.Add("ID_GRUPO_USUARIO_ATENTO", OracleDbType.Int32).Value = model.Codigo;
+                        command.Parameters.Add("NM_GRUPO_USUARIO_ATENTO", OracleDbType.Varchar2).Value = novoGrupo;
+                        command.Parameters.Add("DS_GRUPO_USUARIO_ATENTO", OracleDbType.Varchar2).Value = novaDescricao;
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Verificar Usuário Controle
+
+        public bool VerificarUsuarioControle(string usuarioLogin)
+        {
+
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                if (conn.State == System.Data.ConnectionState.Closed)
+                    conn.Open();
+
+                using (var command = conn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.VERIFICAR_USUARIO_CONTROLE";
+                    command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
+                    command.Parameters.Add("RETORNO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                    DataTable dt = new DataTable();
+
+                    OracleDataReader reader = command.ExecuteReader();
+
+                    dt.Load(reader);
+
+                    if(dt.Rows.Count != 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        #endregion
+
+        #region Deletar Usuário
+
+        public void DeletarUsuario(string usuarioLogin)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                try
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                        conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.DELETAR_USUARIO";
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
         }
 
         #endregion

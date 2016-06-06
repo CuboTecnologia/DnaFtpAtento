@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DnaMais.Atento.Web.Models;
 using System.Web.Security;
 using DnaMais.Atento.Web.Repositories;
+using System.Net;
 
 
 namespace DnaMais.Atento.Web.Controllers
@@ -217,6 +218,52 @@ namespace DnaMais.Atento.Web.Controllers
 
             ViewBag.nomeGrupo = nomeGrupo;
             return View(models);
+        }
+
+        #endregion
+
+        #region Editar Grupo
+
+        public ActionResult EditarGrupo(string nomeGrupo, int codigoGrupo)
+        {
+            var models = _controleArquivoRepository.EditarGrupo(nomeGrupo, codigoGrupo);
+
+            return View(models);
+        }
+
+        #endregion
+
+        #region Editar Grupo [HttpPost]
+
+        [HttpPost]
+        public ActionResult EditarGrupo(string txtGrupo, string txtDescricao, GrupoUsuarioModel model)
+        {
+            _controleArquivoRepository.AtualizarGrupo(txtGrupo, txtDescricao, model);
+
+            TempData["updateGroup"] = "Grupo Atualizado com Sucesso!";
+
+            return RedirectToAction("ListarGrupoUsuario", "Home");
+        }
+
+        #endregion
+
+        #region Deletar Usuário
+
+        [HttpPost]
+        public ActionResult DeletarUsuario(string usuarioLogin)
+        {
+            bool getUser = _controleArquivoRepository.VerificarUsuarioControle(usuarioLogin);
+
+            if (getUser == true)
+            {
+                Response.StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                _controleArquivoRepository.DeletarUsuario(usuarioLogin);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
         }
 
         #endregion

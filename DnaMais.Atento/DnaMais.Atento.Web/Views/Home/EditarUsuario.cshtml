@@ -23,15 +23,15 @@
                         
                         <div class="col-md-5">
                             <label>Nome/Apelido Atual:&emsp;</label>@Html.DisplayFor(model => model.Usuario)
-                            @Html.TextBox("txtUsuario", null, new { @class = "form-control", @placeholder = "Digite um Novo Nome / Apelido" })
-                            <div id="msgUsuario" class="hidden" style="color:red">Campo Nome/Apelido Obrigatório</div>
+                            @Html.TextBox("txtUsuario", null, new { @class = "form-control", @placeholder = "Digite um novo nome / apelido" })
+                            <div id="msgUsuario" class="hidden" style="color:red">Campo nome/apelido obrigatório</div>
                         </div>
 
                         <div class="col-md-5">
                             <label>E-Mail Atual:&emsp;</label>@Html.DisplayFor(model => model.Email)
-                            @Html.TextBox("txtEmail", null, new { @class = "form-control", @placeholder = "Digite um Novo E-Mail" })
-                            <div id="msgEmail" class="hidden" style="color:red">Campo E-Mail Obrigatório</div>
-                            <div id="msgValidarEmail" class="hidden" style="color:red">Insira um E-Mail Válido</div>
+                            @Html.TextBox("txtEmail", null, new { @class = "form-control", @placeholder = "Digite um novo e-mail" })
+                            <div id="msgEmail" class="hidden" style="color:red">Campo e-mail obrigatório</div>
+                            <div id="msgValidarEmail" class="hidden" style="color:red">Insira um e-mail válido</div>
                         </div>
                     </div>
                 </div>
@@ -109,23 +109,6 @@
             }
 
         });
-
-
-        //$('#btnSalvar').click(function () {
-
-        //    var sEmail = $('#txtEmail').val();
-
-        //    if ($('#txtLogin').val() == "" || $('#txtEmail').val() == "") {
-        //        alert('Todos os campos são obrigatórios!');
-        //        return false;
-        //    }
-
-        //    else if (!validateEmail(sEmail)) {
-        //        alert('Insira um E-Mail Válido');
-        //        event.preventDefault();
-        //        $('#txtEmail').focus();
-        //    }
-        //});
     });
 
 </script>
