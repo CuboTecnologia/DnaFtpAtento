@@ -1,0 +1,89 @@
+﻿@model IEnumerable<DnaMais.Atento.Web.Models.ControleArquivoModel>
+
+@Html.Partial("_DataTableScriptListarArquivo")
+
+@*<div style="margin-bottom:10px">
+        <input type="button" class="btn btn-sm btn-default" value="filtros" id="btnFiltros" />
+    </div>
+
+    <div class="panel-body" id="filtros" style="display:none">
+        <p id="paragrafo">dhuashduhasudhasiudhsa</p>
+        @Html.Partial("_Filtros")
+    </div>*@
+
+
+
+<table id="table" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th class="col-lg-1">Id</th>
+            <th class="col-lg-1">Entrada</th>
+            <th class="col-lg-1">Saída</th>
+            <th class="col-lg-3">Arquivo</th>
+            <th class="col-lg-2">Status</th>
+            <th class="col-lg-3">Controle Datas</th>
+            <th class="col-lg-1">Solicitante</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Codigo.ToString(), "ExibirRelatorio", "ControleArquivo", new { itemCodigo = item.Codigo }, null)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LayoutEntrada.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LayoutSaida.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeArquivoEntradaOriginal)
+                </td>
+                <td>
+                    @if (item.Status.Codigo == 6)
+                    {
+                        @Html.ActionLink("Download de Arquivo Retorno Disponível", "DownloadArquivo", "ControleArquivo", new { itemCodigo = item.Codigo }, null)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Status.DescricaoStatus)
+                    }
+                </td>
+
+                <td class="text-left" style="line-height:15px;">
+
+                    <div style="float: left; width: 65px;">
+                        Registro:
+                    </div>
+                    <div style="float: left;">
+                        <strong>@Html.DisplayFor(modelItem => item.DataRegistro)</strong>
+                    </div>
+
+                    <br /><br />
+
+                    <div style="float:left; width:65px;">
+                        Início:
+                    </div>
+                    <div style="float: left;">
+                        <strong>@(item.DataInicioExecucao == null ? "" : ((DateTime)item.DataInicioExecucao).ToString("dd/MM/yyyy HH:mm"))</strong>
+                    </div>
+
+                    <br /><br />
+                    <div style="float: left; width: 65px;">
+                        Término:
+                    </div>
+                    <div style="float:left;">
+                        <strong>@(item.DataTerminoExecucao == null ? "" : ((DateTime)item.DataTerminoExecucao).ToString("dd/MM/yyyy HH:mm"))</strong>
+                    </div>
+                </td>
+                <td nowrap>
+                    @Html.DisplayFor(modelItem => item.NomeUsuarioSolicitante)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

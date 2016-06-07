@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace DnaMais.Atento.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ControleArquivoController : Controller
     {
         private readonly ControleArquivoRepository _controleArquivoRepository;
@@ -382,5 +382,20 @@ namespace DnaMais.Atento.Web.Controllers
         }
 
         #endregion
+
+        #region Recarregar Lista de Arquivos
+
+        [HttpPost]
+        public PartialViewResult RecarregarGrid()
+        {
+           
+            var models = _controleArquivoRepository.GetAll(Session["LoginUsuario"].ToString());
+
+            return PartialView("_GridArquivos", models);
+        }
+
+        #endregion
+
+
     }
 }

@@ -6,10 +6,12 @@
     <title>@ViewBag.Title</title>
 
     <script src="~/Scripts/jquery-2.2.3.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
     <script src="~/Scripts/respond.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/fileinput.js"></script>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     <link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
     <link href="~/Content/bootstrap-fileinput-master/css/fileinput.min.css" rel="stylesheet" />
@@ -42,7 +44,7 @@
 
                         if (Session["TipoUsuario"].ToString() == "A" || Session["TipoUsuario"].ToString() == "M")
                         {
-                            @Html.ActionLink("Grupo de Usuário", "ListarGrupoUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
+                            @Html.ActionLink("Gerenciar Grupos", "ListarGrupoUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
                             @Html.ActionLink("Gerenciar Usuários", "ListarUsuarios", "Home", new { area = "" }, new { @class = "btn btn-menu" })
                         }
 
@@ -52,7 +54,13 @@
 
                         if (Session["NomeUsuario"].ToString() != null)
                         {
-                            @Html.Label("Logado como  " + Session["NomeUsuario"].ToString())
+                                    <fieldset>
+                                        Logado como 
+                                        @Html.Label(Session["NomeUsuario"].ToString())
+                                        <br />
+                                        Grupo
+                                        @Html.Label(Session["GrupoUsuario"].ToString())
+                                    </fieldset>
                         }
                     }
                     }

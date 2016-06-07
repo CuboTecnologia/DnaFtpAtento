@@ -21,7 +21,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin" })
-            <div id="msgLogin" style="color:red" class="hidden">Campo Login Obrigatório</div>
+            <div id="msgLogin" style="color:red" class="hidden">Campo login obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -29,7 +29,7 @@
         </div>
         <div class="editor-field">
             @Html.PasswordFor(model => model.Senha, new { @class = "form-control", @id = "txtSenha" })
-            <div id="msgSenha" style="color:red" class="hidden">Campo Senha Obrigatório</div>
+            <div id="msgSenha" style="color:red" class="hidden">Campo senha obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -38,7 +38,7 @@
         <div class="editor-field">
             @Html.PasswordFor(model => model.ConfirmarSenha, new { @class = "form-control", @id = "txtConfirmarSenha" })
             <div id="msgConfirmarSenha" style="color:red" class="hidden">Digite sua senha novamente</div>
-            <div id="msgValidarSenha" style="color:red" class="hidden">Campo "Senha" e "Confirmar Senha" estão Diferentes</div>
+            <div id="msgValidarSenha" style="color:red" class="hidden">Campo "Senha" e "Confirmar Senha" estão diferentes</div>
         </div>
         <br />
         <div class="control-label">
@@ -46,7 +46,7 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", @id = "txtUsuario" })
-            <div id="msgUsuario" style="color:red" class="hidden">Campo "Nome/Apelido" Obrigatório</div>
+            <div id="msgUsuario" style="color:red" class="hidden">Campo "Nome/Apelido" obrigatório</div>
         </div>
         <br />
         <div class="control-label">
@@ -54,8 +54,8 @@
         </div>
         <div class="editor-field">
             @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "txtEmail" })
-            <div id="msgEmail" style="color:red" class="hidden">Campo E-Mail Obrigatório</div>
-            <div id="msgValidarEmail" class="hidden" style="color:red">Insira um E-Mail Válido</div>
+            <div id="msgEmail" style="color:red" class="hidden">Campo e-mail obrigatório</div>
+            <div id="msgValidarEmail" class="hidden" style="color:red">Insira um e-mail válido</div>
         </div>
         <br />
         <div class="control-label">
@@ -122,7 +122,6 @@
 
                 if ($('#txtLogin').val() == "") {
                     $('#msgLogin').removeClass('hidden');
-                    $('#txtLogin').focus();
                     return false;
                 }
                 else {
@@ -135,7 +134,6 @@
 
                 if ($('#txtSenha').val() == "") {
                     $('#msgSenha').removeClass('hidden');
-                    $('#txtSenha').focus();
                     return false;
                 }
                 else {
@@ -150,7 +148,6 @@
 
                 if ($('#txtConfirmarSenha').val() == "") {
                     $('#msgConfirmarSenha').removeClass('hidden');
-                    $('#txtConfirmarSenha').focus();
                     return false;
                 }
                 else {
@@ -172,7 +169,6 @@
 
                 if ($('#txtUsuario').val() == "") {
                     $('#msgUsuario').removeClass('hidden');
-                    $('#txtUsuario').focus();
                     return false;
                 }
                 else {
@@ -187,7 +183,6 @@
 
                 if ($('#txtEmail').val() == "") {
                     $('#msgEmail').removeClass('hidden');
-                    $('#txtEmail').focus();
                     return false;
                 }
                 else {
@@ -203,6 +198,11 @@
                     $('#msgValidarEmail').addClass('hidden');
                 }
 
+            });
+
+            $('#txtLogin').keyup(function () {
+                var text = $(this).val();
+                $(this).val(text.toUpperCase());
             });
         });
 

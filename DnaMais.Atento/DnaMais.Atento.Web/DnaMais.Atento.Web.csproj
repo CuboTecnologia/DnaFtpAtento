@@ -191,6 +191,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="img\ajax-loader.gif" />
     <Content Include="img\logo.png" />
     <Content Include="img\LogoDNA.png" />
     <Content Include="img\LogoDNAMaisFooter.png" />
@@ -271,6 +272,7 @@
     <Content Include="Views\Home\EditarUsuario.cshtml" />
     <Content Include="Views\Home\DetalharGrupo.cshtml" />
     <Content Include="Views\Home\EditarGrupo.cshtml" />
+    <Content Include="Views\Shared\_GridArquivos.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

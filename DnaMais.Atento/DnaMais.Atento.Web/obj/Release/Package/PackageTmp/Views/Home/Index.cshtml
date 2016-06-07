@@ -19,7 +19,7 @@
             @Html.LabelFor(model => model.Login)
         </div>
         <div class="editor-field">
-            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin"  })
+            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin" } )
             <div id="msgLogin" style="color: red" class="hidden">Insira um Login</div>
         </div>
         <br />
@@ -52,7 +52,6 @@
                 if($('#txtLogin').val() == "")
                 {
                     $('#msgLogin').removeClass('hidden');
-                    $('#txtLogin').focus();
                     return false;
                 }
                 else
@@ -67,7 +66,6 @@
                 if($('#txtSenha').val() == "")
                 {
                     $('#msgSenha').removeClass('hidden');
-                    $('#txtSenha').focus();
                     return false;
                 }
                 else
@@ -76,19 +74,10 @@
                 }
             });
 
-            //$("#btnAcessar").click(function () {
-
-            //    var login = $("#txtLogin").val();
-                
-            //    var senha = $("#txtSenha").val();
-
-            //    if (login == "" || senha == "") {
-            //        alert("Preencha os campos corretamente!")
-                    
-            //    }
-
-
-            //});
+            $('#txtLogin').keyup(function () {
+                var text = $(this).val();
+                $(this).val(text.toUpperCase());
+            });
 
         });
 

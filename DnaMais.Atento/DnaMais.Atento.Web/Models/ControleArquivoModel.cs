@@ -42,7 +42,6 @@ namespace DnaMais.Atento.Web.Models
         {
             get
             {
-                //return Arquivo == null ? _nomeArquivoEntrada : Arquivo.FileName;
                 return _nomeArquivoEntrada;
             }
             set
