@@ -33,6 +33,16 @@
                             <div id="msgEmail" class="hidden" style="color:red">Campo e-mail obrigatório</div>
                             <div id="msgValidarEmail" class="hidden" style="color:red">Insira um e-mail válido</div>
                         </div>
+                        
+                        <div class="col-md-12">
+                            @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
+                            {
+                                <br />
+                                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" />@item.Text
+                            }
+                            <div id="msgGrupo" style="color:red" class="hidden">Selecione, no mínimo, UM grupo</div>
+                        </div>
+
                     </div>
                 </div>
             </div>

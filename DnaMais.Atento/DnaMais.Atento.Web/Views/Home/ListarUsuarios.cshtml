@@ -55,12 +55,6 @@
                             </td>
                         </tr>
                     }
-                    <tr>
-                        <td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="usuarioExcluido" hidden="hidden">
-                            Usuário excluído com sucesso.
-                        </td>
-                    </tr>
-
                 </tbody>
             </table>
         </div>
@@ -103,13 +97,20 @@
                                 $(excluirClick).closest('tr').fadeOut(500);
 
                                 setTimeout(function () {
-                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="usuarioExcluido">Usuário excluído com sucesso.</td></tr>');
-                                    $('#usuarioExcluido').delay(1000).fadeOut(500);
+                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#22862c; color:#ffe9e9" id="usuarioExcluido">Usuário excluído com sucesso.</td></tr>');
+                                    $('#usuarioExcluido').delay(1500).fadeOut(800);
                                 }, 500);
                             },
                             error: function () {
 
-                                alert('O usuário não pôde ser excluído!');
+                                $(excluirClick).closest('tr').fadeOut(500);
+
+                                setTimeout(function () {
+                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="falhaExclusao">O usuário possui processamentos enviados. Exclusão falhou.</td></tr>');
+                                    $('#falhaExclusao').delay(4000).fadeOut(800);
+                                }, 500);
+
+                                $(excluirClick).closest('tr').delay(4800).fadeIn(500);
 
                             }
 

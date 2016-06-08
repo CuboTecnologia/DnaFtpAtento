@@ -11,7 +11,9 @@
         @Html.Partial("_Filtros")
     </div>*@
 
-
+    Refresh automático às <label>@DateTime.Now.AddMilliseconds(300000).ToString("HH:mm")</label>
+<br />
+<br />
 
 <table id="table" class="display" cellspacing="0" width="100%">
     <thead>
@@ -47,6 +49,18 @@
                     @if (item.Status.Codigo == 6)
                     {
                         @Html.ActionLink("Download de Arquivo Retorno Disponível", "DownloadArquivo", "ControleArquivo", new { itemCodigo = item.Codigo }, null)
+                    }
+                    else if (item.Status.Codigo == 98)
+                    {
+                        <div style="color:#f30e0e">
+                            @Html.DisplayFor(modelItem => item.Status.DescricaoStatus)
+                        </div>
+                    }
+                    else if (item.Status.Codigo == 99)
+                    {
+                        <div style="color:#f30e0e">
+                            @Html.DisplayFor(modelItem => item.Status.DescricaoStatus)
+                        </div>
                     }
                     else
                     {

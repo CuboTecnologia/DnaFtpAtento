@@ -189,6 +189,14 @@ namespace DnaMais.Atento.Web.Controllers
 
         public ActionResult EditarUsuario(string usuarioNome, string usuarioLogin)
         {
+            if (Session["NomeUsuario"] == null)
+            {
+                TempData["sessionFinalizada"] = "Sessão Finalizada. Efetue o login novamente.";
+                return Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
+            }
+
+            ViewData["GrupoUsuarioCkl"] = _controleArquivoRepository.GetAllGruposCkl(Session["TipoUsuario"].ToString(), Session["LoginUsuario"].ToString()).ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(), Text = x.Nome });
+
             var models = _controleArquivoRepository.EditarUsuario(usuarioNome, usuarioLogin);
 
             return View(models);

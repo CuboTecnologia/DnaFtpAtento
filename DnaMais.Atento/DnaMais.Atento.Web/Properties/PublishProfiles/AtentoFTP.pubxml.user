@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Publish\AtentoFTP\070616</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Publish\AtentoFTP\080616</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -364,7 +364,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/18/2016 10:01:22</publishTime>
     </File>
     <File Include="Views/ControleArquivo/ListarArquivo.cshtml">
-      <publishTime>06/07/2016 16:51:03</publishTime>
+      <publishTime>06/08/2016 10:54:41</publishTime>
     </File>
     <File Include="Views/ControleArquivo/ListarFtpEntrada.cshtml">
       <publishTime>05/31/2016 07:41:27</publishTime>
@@ -379,13 +379,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/06/2016 15:58:32</publishTime>
     </File>
     <File Include="Views/Home/DetalharGrupo.cshtml">
-      <publishTime>06/06/2016 10:04:35</publishTime>
+      <publishTime>06/08/2016 10:37:09</publishTime>
     </File>
     <File Include="Views/Home/EditarGrupo.cshtml">
       <publishTime>06/06/2016 07:29:16</publishTime>
     </File>
     <File Include="Views/Home/EditarUsuario.cshtml">
-      <publishTime>06/06/2016 07:29:16</publishTime>
+      <publishTime>06/08/2016 10:08:01</publishTime>
     </File>
     <File Include="Views/Home/EditarUsuarios.cshtml">
       <publishTime>05/28/2016 19:56:16</publishTime>
@@ -394,10 +394,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/06/2016 08:39:31</publishTime>
     </File>
     <File Include="Views/Home/ListarGrupoUsuario.cshtml">
-      <publishTime>06/06/2016 08:49:37</publishTime>
+      <publishTime>06/08/2016 14:43:25</publishTime>
     </File>
     <File Include="Views/Home/ListarUsuarios.cshtml">
-      <publishTime>06/06/2016 17:03:16</publishTime>
+      <publishTime>06/08/2016 10:31:37</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>05/30/2016 07:47:30</publishTime>
@@ -415,7 +415,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/22/2016 16:16:44</publishTime>
     </File>
     <File Include="Views/Shared/_GridArquivos.cshtml">
-      <publishTime>06/07/2016 11:45:12</publishTime>
+      <publishTime>06/08/2016 11:08:11</publishTime>
     </File>
     <File Include="Views/Shared/_GridFtpEntrada.cshtml">
       <publishTime>05/30/2016 07:47:30</publishTime>

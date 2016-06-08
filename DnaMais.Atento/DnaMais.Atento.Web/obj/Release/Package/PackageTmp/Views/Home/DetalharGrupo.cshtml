@@ -6,7 +6,7 @@
 
 <hr />
 
-@Html.ActionLink("Voltar para Listagem de Grupos", "ListarGrupoUsuario", "Home", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Voltar para Lista de Grupos", "ListarGrupoUsuario", "Home", null, new { @class = "btn btn-primary" })
 
 <hr />
 
@@ -44,7 +44,7 @@
                                 <td nowrap>
                                     @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar", @class = "editarUsuario" })
                                     <label> | </label>
-                                    @Html.ActionLink("Excluir", "ExcluirUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+                                    @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
                                 </td>
                             </tr>
                         }
@@ -63,3 +63,76 @@
             </div>
         </div>
     </div>
+
+<div id="dialog" title="Atenção!">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>
+    <p>Tem certeza que deseja excluir este usuário?</p>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        var excluirClick;
+
+        $(".excluirUsuario").click(function (event) {
+            $("#dialog").dialog("open");
+            excluirClick = $(this);
+            event.preventDefault();
+        });
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            width: 400,
+            buttons: [
+                {
+                    text: "Confirmar",
+                    click: function () {
+
+                        $.ajax({
+                            type: "POST",
+                            url: $(excluirClick).attr('href'),
+                            datatype: 'json',
+                            crossDomain: true,
+
+                            success: function (data) {
+
+                                $(excluirClick).closest('tr').fadeOut(500);
+
+                                setTimeout(function () {
+                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#22862c; color:#ffe9e9" id="usuarioExcluido">Usuário excluído com sucesso.</td></tr>');
+                                    $('#usuarioExcluido').delay(1500).fadeOut(800);
+                                }, 500);
+                            },
+                            error: function () {
+
+                                $(excluirClick).closest('tr').fadeOut(500);
+
+                                setTimeout(function () {
+                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="falhaExclusao">O usuário possui processamentos enviados. Exclusão falhou.</td></tr>');
+                                    $('#falhaExclusao').delay(4000).fadeOut(800);
+                                }, 500);
+
+                                $(excluirClick).closest('tr').delay(4800).fadeIn(500);
+
+                            }
+
+                        });
+
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    text: "Cancelar",
+                    click: function () {
+
+                        $(this).dialog("close");
+
+                    }
+                }
+            ]
+        });
+
+    });
+
+</script>

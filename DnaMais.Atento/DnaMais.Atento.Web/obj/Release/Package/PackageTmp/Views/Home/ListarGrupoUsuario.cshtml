@@ -51,9 +51,9 @@
                                 </td>
                                 <td nowrap class="col-md-1">
                                     @Html.ActionLink("Editar", "EditarGrupo", "Home", new { nomeGrupo = item.Nome, codigoGrupo = item.Codigo }, null)
-                                    <label> | </label>
-                                    @Html.ActionLink("Excluir", "ExcluirGrupo", "Home", new { nomeGrupo = item.Nome, codigoGrupo = item.Codigo }, new { @class = "excluirGrupo" })
-                                </td>
+                                    @*<label> | </label>
+                                    @Html.ActionLink("Excluir", "DeletarGrupo", "Home", new { nomeGrupo = item.Nome, codigoGrupo = item.Codigo }, new { @class = "excluirGrupo" })
+                                </td>*@
                             </tr>
                         }
                     </tbody>
