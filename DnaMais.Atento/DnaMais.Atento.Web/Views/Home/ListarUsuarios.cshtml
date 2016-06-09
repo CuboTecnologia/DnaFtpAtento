@@ -28,7 +28,7 @@
                         <th>Usuário</th>
                         <th>E-Mail</th>
                         <th>Grupo</th>
-                        <th></th>
+                        <th>Gerenciamento</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,7 +106,7 @@
                                 $(excluirClick).closest('tr').fadeOut(500);
 
                                 setTimeout(function () {
-                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="falhaExclusao">O usuário possui processamentos enviados. Exclusão falhou.</td></tr>');
+                                    $(excluirClick).closest('tr').after('<tr><td colspan="5" style="background-color:#a33e3e; color:#ffe9e9" id="falhaExclusao">Falha na exclusão. O usuário possui processamentos enviados.</td></tr>');
                                     $('#falhaExclusao').delay(4000).fadeOut(800);
                                 }, 500);
 
@@ -117,6 +117,7 @@
                         });
 
                         $(this).dialog("close");
+
                     }
                 },
                 {

@@ -296,7 +296,8 @@ AS
                      (DS_LOGIN
                      ,ID_GRUPO_USUARIO_ATENTO)
          SELECT 
-                     P_DS_LOGIN,REGEXP_SUBSTR(P_CD_GRUPOS,'[^,]+', 1, LEVEL) 
+                     P_DS_LOGIN,
+                     REGEXP_SUBSTR(P_CD_GRUPOS,'[^,]+', 1, LEVEL) 
          FROM 
                      DUAL
          CONNECT BY 
@@ -471,6 +472,7 @@ AS
              ,USUARIO_ATENTO.NM_USUARIO
              ,USUARIO_ATENTO.DS_EMAIL
              ,GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO
+             ,GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO
           FROM 
               USUARIO_ATENTO
           JOIN
@@ -518,7 +520,8 @@ AS
     (
         P_DS_LOGIN           IN USUARIO_ATENTO.DS_LOGIN%TYPE,
         P_NM_NOVO_USUARIO    IN VARCHAR2,
-        P_DS_NOVO_EMAIL      IN VARCHAR2
+        P_DS_NOVO_EMAIL      IN VARCHAR2,
+        P_CD_GRUPOS          IN VARCHAR2
     )
     IS
     BEGIN
@@ -533,6 +536,25 @@ AS
                DS_LOGIN = P_DS_LOGIN;
                
          COMMIT;
+         
+         DELETE FROM
+                    USUARIO_ATENTO_GRUPO_USUARIO
+         WHERE
+                    DS_LOGIN = P_DS_LOGIN;
+                    
+         COMMIT;
+         
+         INSERT INTO
+                    USUARIO_ATENTO_GRUPO_USUARIO
+                    (DS_LOGIN
+                    ,ID_GRUPO_USUARIO_ATENTO)
+         SELECT
+                    P_DS_LOGIN
+                    ,REGEXP_SUBSTR(P_CD_GRUPOS,'[^,]+',1,LEVEL)
+         FROM
+                    DUAL
+         CONNECT BY
+                    REGEXP_SUBSTR(P_CD_GRUPOS,'[^,]+',1,LEVEL) IS NOT NULL;
          
     END;
     
@@ -654,6 +676,43 @@ AS
                      UA.DS_LOGIN = P_DS_LOGIN;
           COMMIT;
           
+    END;
+    
+    PROCEDURE VERIFICAR_USUARIO_GRUPO
+    (
+        P_CD_GRUPO           IN USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO%TYPE
+        ,RETORNO_CD_GRUPO    OUT SYS_REFCURSOR
+    )
+    
+    IS
+    BEGIN
+    
+         OPEN
+             RETORNO_CD_GRUPO
+         FOR
+         
+         SELECT
+               DS_LOGIN
+         FROM
+               USUARIO_ATENTO_GRUPO_USUARIO UAGU
+         WHERE
+               UAGU.ID_GRUPO_USUARIO_ATENTO = P_CD_GRUPO;
+    
+    END;
+    
+    PROCEDURE DELETAR_GRUPO
+    (
+        P_CD_GRUPO         IN GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO%TYPE
+    )
+    IS
+    BEGIN
+    
+         DELETE FROM
+                    GRUPO_USUARIO_ATENTO GUA
+         WHERE
+                    GUA.ID_GRUPO_USUARIO_ATENTO = P_CD_GRUPO;
+         COMMIT;
+    
     END;
     
 END;

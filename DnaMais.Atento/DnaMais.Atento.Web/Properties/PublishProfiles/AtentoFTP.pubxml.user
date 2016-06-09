@@ -6,14 +6,14 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Publish\AtentoFTP\080616</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Publish\AtentoFTP\090616</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>05/30/2016 07:47:31</publishTime>
     </File>
     <File Include="bin/DnaMais.Atento.Web.dll">
-      <publishTime>06/07/2016 16:33:07</publishTime>
+      <publishTime>06/09/2016 13:16:17</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>05/30/2016 07:47:31</publishTime>
@@ -376,7 +376,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/31/2016 12:21:33</publishTime>
     </File>
     <File Include="Views/Home/CriarUsuario.cshtml">
-      <publishTime>06/06/2016 15:58:32</publishTime>
+      <publishTime>06/09/2016 10:25:56</publishTime>
     </File>
     <File Include="Views/Home/DetalharGrupo.cshtml">
       <publishTime>06/08/2016 10:37:09</publishTime>
@@ -385,7 +385,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/06/2016 07:29:16</publishTime>
     </File>
     <File Include="Views/Home/EditarUsuario.cshtml">
-      <publishTime>06/08/2016 10:08:01</publishTime>
+      <publishTime>06/09/2016 10:50:41</publishTime>
     </File>
     <File Include="Views/Home/EditarUsuarios.cshtml">
       <publishTime>05/28/2016 19:56:16</publishTime>
@@ -394,10 +394,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/06/2016 08:39:31</publishTime>
     </File>
     <File Include="Views/Home/ListarGrupoUsuario.cshtml">
-      <publishTime>06/08/2016 14:43:25</publishTime>
+      <publishTime>06/09/2016 13:13:18</publishTime>
     </File>
     <File Include="Views/Home/ListarUsuarios.cshtml">
-      <publishTime>06/08/2016 10:31:37</publishTime>
+      <publishTime>06/09/2016 13:12:33</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>05/30/2016 07:47:30</publishTime>

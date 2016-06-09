@@ -396,6 +396,5 @@ namespace DnaMais.Atento.Web.Controllers
 
         #endregion
 
-
     }
 }

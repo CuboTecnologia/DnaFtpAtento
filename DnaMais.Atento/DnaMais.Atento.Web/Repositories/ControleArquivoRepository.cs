@@ -483,6 +483,7 @@ namespace DnaMais.Atento.Web.Repositories
                                         Grupos = new GrupoUsuarioModel
                                         {
                                             Nome = reader["NM_GRUPO_USUARIO_ATENTO"].ToString(),
+                                            Codigo = Convert.ToInt32(reader["ID_GRUPO_USUARIO_ATENTO"]),
                                         }
                                     });
                             }
@@ -558,7 +559,7 @@ namespace DnaMais.Atento.Web.Repositories
 
         #region Atualizar Usuário
 
-        public void AtualizarUsuario(string novoUsuario, string novoEmail, UsuarioModel model)
+        public void AtualizarUsuario(string novoUsuario, string novoEmail, string[] grupoUsuario, UsuarioModel model)
         {
 
             using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
@@ -567,6 +568,11 @@ namespace DnaMais.Atento.Web.Repositories
                 {
                     using (var command = conn.CreateCommand())
                     {
+                        string codGrupos = null;
+                        foreach (string item in grupoUsuario)
+                        {
+                            codGrupos = codGrupos + item + ",";
+                        }
                         if (conn.State == System.Data.ConnectionState.Closed)
                             conn.Open();
 
@@ -575,6 +581,7 @@ namespace DnaMais.Atento.Web.Repositories
                         command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = model.Login;
                         command.Parameters.Add("P_NM_NOVO_USUARIO", OracleDbType.Varchar2).Value = novoUsuario;
                         command.Parameters.Add("P_DS_NOVO_EMAIL", OracleDbType.Varchar2).Value = novoEmail;
+                        command.Parameters.Add("P_CD_GRUPOS", OracleDbType.Varchar2).Value = codGrupos.Substring(0, codGrupos.Length - 1);
 
                         command.ExecuteNonQuery();
                     }
@@ -737,27 +744,34 @@ namespace DnaMais.Atento.Web.Repositories
                 if (conn.State == System.Data.ConnectionState.Closed)
                     conn.Open();
 
-                using (var command = conn.CreateCommand())
+                try
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.VERIFICAR_USUARIO_CONTROLE";
-                    command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
-                    command.Parameters.Add("RETORNO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
-
-                    DataTable dt = new DataTable();
-
-                    OracleDataReader reader = command.ExecuteReader();
-
-                    dt.Load(reader);
-
-                    if(dt.Rows.Count != 0)
+                    using (var command = conn.CreateCommand())
                     {
-                        return true;
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.VERIFICAR_USUARIO_CONTROLE";
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = usuarioLogin;
+                        command.Parameters.Add("RETORNO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                        DataTable dt = new DataTable();
+
+                        OracleDataReader reader = command.ExecuteReader();
+
+                        dt.Load(reader);
+
+                        if (dt.Rows.Count != 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-                    else
-                    {
-                        return false;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
             }
 
@@ -789,6 +803,74 @@ namespace DnaMais.Atento.Web.Repositories
                 {
                     throw ex;
                 }
+            }
+        }
+
+        #endregion
+
+        #region Verificar Grupo Usuário
+
+        public bool VerificarUsuarioGrupo(int codGrupo)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                if (conn.State == System.Data.ConnectionState.Closed)
+                    conn.Open();
+
+                using (var command = conn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.VERIFICAR_USUARIO_GRUPO";
+                    command.Parameters.Add("P_CD_GRUPO", OracleDbType.Int32).Value = codGrupo;
+                    command.Parameters.Add("RETORNO_CD_GRUPO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                    DataTable dt = new DataTable();
+                    OracleDataReader reader = command.ExecuteReader();
+
+                    dt.Load(reader);
+
+                    if (dt.Rows.Count != 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Deletar Grupo
+
+        public void DeletarGrupo(int codGrupo)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+
+                try
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                        conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.DELETAR_GRUPO";
+                        command.Parameters.Add("P_CD_GRUPO", OracleDbType.Int32).Value = codGrupo;
+
+                        command.ExecuteNonQuery();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    
+                    throw ex;
+                }
+                
             }
         }
 

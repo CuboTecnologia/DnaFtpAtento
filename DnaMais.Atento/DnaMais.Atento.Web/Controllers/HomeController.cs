@@ -207,9 +207,9 @@ namespace DnaMais.Atento.Web.Controllers
         #region Editar Usuário [HttpPost]
 
         [HttpPost]
-        public ActionResult EditarUsuario(string txtUsuario, string txtEmail, UsuarioModel model)
+        public ActionResult EditarUsuario(string txtUsuario, string txtEmail, string[] grupoUsuario, UsuarioModel model)
         {
-            _controleArquivoRepository.AtualizarUsuario(txtUsuario, txtEmail, model);
+            _controleArquivoRepository.AtualizarUsuario(txtUsuario, txtEmail, grupoUsuario, model);
 
             TempData["updateUser"] = "Usuário Atualizado com Sucesso!";
 
@@ -272,6 +272,28 @@ namespace DnaMais.Atento.Web.Controllers
                 _controleArquivoRepository.DeletarUsuario(usuarioLogin);
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        #endregion
+
+        #region Deletar Grupo
+
+        [HttpPost]
+        public ActionResult DeletarGrupo(int codGrupo)
+        {
+            bool getUserGroup = _controleArquivoRepository.VerificarUsuarioGrupo(codGrupo);
+
+            if (getUserGroup == true)
+            {
+                Response.StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                _controleArquivoRepository.DeletarGrupo(codGrupo);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         #endregion
