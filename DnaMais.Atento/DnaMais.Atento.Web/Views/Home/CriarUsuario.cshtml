@@ -64,7 +64,7 @@
         <div class="editor-field">
             @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
             {
-                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" />@item.Text
+                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" /> @item.Text
                 <br />
             }
             <div id="msgGrupo" style="color:red" class="hidden">Selecione, no mínimo, UM grupo</div>

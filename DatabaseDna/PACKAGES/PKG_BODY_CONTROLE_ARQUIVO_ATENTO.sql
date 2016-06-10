@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY DNAONLINE.PKG_CONTROLE_ARQUIVO_ATENTO
+CREATE OR REPLACE PACKAGE BODY DNA.PKG_CONTROLE_ARQUIVO_ATENTO
 AS
     PROCEDURE ATUALIZAR_STATUS_DOWNLOAD
     (
@@ -170,7 +170,7 @@ AS
         RETORNO_CONTROLE_ARQUIVO    OUT SYS_REFCURSOR
     )
     IS
-        V_CD_TIPO_USUARIO DNAONLINE.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
+        V_CD_TIPO_USUARIO DNA.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
     BEGIN
     
          SELECT
@@ -178,7 +178,7 @@ AS
          INTO
              V_CD_TIPO_USUARIO
          FROM
-             DNAONLINE.USUARIO_ATENTO  
+             DNA.USUARIO_ATENTO  
          WHERE
              DS_LOGIN = P_DS_LOGIN;
     
@@ -225,8 +225,8 @@ AS
           WHERE
                 (V_CD_TIPO_USUARIO = 'A'
                  OR CONTROLE_ARQ_ATENTO.DS_LOGIN IN (SELECT DISTINCT GRP.DS_LOGIN
-                                                     FROM   DNAONLINE.USUARIO_ATENTO_GRUPO_USUARIO GRP
-                                                     JOIN   DNAONLINE.USUARIO_ATENTO USU
+                                                     FROM   DNA.USUARIO_ATENTO_GRUPO_USUARIO GRP
+                                                     JOIN   DNA.USUARIO_ATENTO USU
                                                      ON     USU.DS_LOGIN = GRP.DS_LOGIN
                                                      WHERE  USU.DS_LOGIN = P_DS_LOGIN))
           ORDER BY
@@ -712,6 +712,28 @@ AS
          WHERE
                     GUA.ID_GRUPO_USUARIO_ATENTO = P_CD_GRUPO;
          COMMIT;
+    
+    END;
+    
+    PROCEDURE LISTAR_GRUPOS
+    (
+        P_DS_LOGIN            IN USUARIO_ATENTO.DS_LOGIN%TYPE,
+        RETORNO_GRUPO         OUT SYS_REFCURSOR
+    )
+    
+    IS
+    BEGIN
+    
+    OPEN
+        RETORNO_GRUPO
+    FOR
+    
+         SELECT 
+                UAGU.ID_GRUPO_USUARIO_ATENTO 
+         FROM 
+                USUARIO_ATENTO_GRUPO_USUARIO UAGU 
+         WHERE 
+                UAGU.DS_LOGIN = P_DS_LOGIN;
     
     END;
     

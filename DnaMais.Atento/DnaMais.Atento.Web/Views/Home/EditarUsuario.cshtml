@@ -39,11 +39,26 @@
                             <br />
                             <label>Escolha o(s) grupo(s):</label>
 
+                            @{var listaGrupos = Session["GruposUsuario"] as List<string>;
 
-                            @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
+                            foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
                             {
-                                <br />
-                                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" />@item.Text
+                               
+                                if (listaGrupos.Contains(item.Value))
+                                    {
+                                        <br />
+                                        <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" checked="checked" /> @item.Text
+                                    }
+                                    else
+                                    {
+                                        <br />
+                                        <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" /> @item.Text
+                                    }
+
+                                    continue;
+
+                            }
+
                             }
                             <div id="msgGrupo" style="color:red" class="hidden">Selecione, no mínimo, UM grupo</div>
                         </div>

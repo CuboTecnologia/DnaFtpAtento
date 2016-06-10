@@ -146,7 +146,7 @@ namespace DnaMais.Atento.Web.Repositories
                         if (reader.HasRows)
                         {
                             dt.Load(reader);
-                            if (dt.Rows.Count == 1)
+                            if (dt.Rows.Count != 0)
                             {
                                 UsuarioModel objRetorno = new UsuarioModel();
                                 objRetorno.Usuario = dt.Rows[0]["NM_USUARIO"].ToString();
@@ -872,6 +872,49 @@ namespace DnaMais.Atento.Web.Repositories
                 }
                 
             }
+        }
+
+        #endregion
+
+        #region Listar Grupos
+
+        public List<string> GetAllGrupos(string loginUsuario)
+        {
+            List<string> grupos = new List<string>();
+
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                try
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.LISTAR_GRUPOS";
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = loginUsuario;
+                        command.Parameters.Add("RETORNO_GRUPO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+                        command.ExecuteNonQuery();
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                grupos.Add(reader["ID_GRUPO_USUARIO_ATENTO"].ToString());
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
+            return grupos;
         }
 
         #endregion

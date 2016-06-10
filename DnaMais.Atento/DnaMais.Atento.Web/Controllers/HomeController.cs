@@ -48,7 +48,9 @@ namespace DnaMais.Atento.Web.Controllers
                 Session.Add("LoginUsuario", usuarioRetorno.Login);
                 Session.Add("EmailUsuario", usuarioRetorno.Email);
                 Session.Add("TipoUsuario", usuarioRetorno.TipoUsuario);
-                Session.Add("GrupoUsuario", usuarioRetorno.Grupos.Nome);
+                Session.Add("GruposUsuario", _controleArquivoRepository.GetAllGrupos(Session["LoginUsuario"].ToString()).ToList());
+
+                //ViewBag.GruposUsuario = _controleArquivoRepository.GetAllGrupos(Session["LoginUsuario"].ToString()).ToList();
 
                 FormsAuthentication.SetAuthCookie(usuario.Login, false);
 

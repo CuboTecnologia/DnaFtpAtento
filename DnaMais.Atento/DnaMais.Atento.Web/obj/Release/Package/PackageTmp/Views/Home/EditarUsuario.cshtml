@@ -11,7 +11,7 @@
 
 <hr />
 
-@{Html.BeginForm("EditarUsuario","Home");
+@{Html.BeginForm("EditarUsuario", "Home");
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -21,7 +21,7 @@
                         <div class="col-md-12">
                             @Html.HiddenFor(model => model.Login)
                         </div>
-                        
+
                         <div class="col-md-5">
                             <label>Nome/Apelido Atual:&emsp;</label>@Html.DisplayFor(model => model.Usuario)
                             @Html.TextBox("txtUsuario", null, new { @class = "form-control", @placeholder = "Digite um novo nome / apelido" })
@@ -34,14 +34,31 @@
                             <div id="msgEmail" class="hidden" style="color:red">Campo e-mail obrigatório</div>
                             <div id="msgValidarEmail" class="hidden" style="color:red">Insira um e-mail válido</div>
                         </div>
-                        
+
                         <div class="col-md-12">
                             <br />
                             <label>Escolha o(s) grupo(s):</label>
-                            @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
+
+                            @{var listaGrupos = Session["GruposUsuario"] as List<string>;
+
+                            foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
                             {
-                                <br />
-                                <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" />@item.Text
+                               
+                                if (listaGrupos.Contains(item.Value))
+                                    {
+                                        <br />
+                                        <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" checked="checked" /> @item.Text
+                                    }
+                                    else
+                                    {
+                                        <br />
+                                        <input type="checkbox" id="grupoUsuario@(item.Value)" name="grupoUsuario" value="@(item.Value)" /> @item.Text
+                                    }
+
+                                    continue;
+
+                            }
+
                             }
                             <div id="msgGrupo" style="color:red" class="hidden">Selecione, no mínimo, UM grupo</div>
                         </div>
@@ -66,8 +83,7 @@
 
             var sEmail = $('#txtEmail').val();
 
-            if(!validateEmail(sEmail))
-            {
+            if (!validateEmail(sEmail)) {
                 $('#msgValidarEmail').removeClass('hidden');
                 $('#txtEmail').focus();
                 return false;
@@ -107,13 +123,11 @@
 
         $('#txtUsuario').on('blur', function () {
 
-            if ($('#txtUsuario').val() == "")
-            {
+            if ($('#txtUsuario').val() == "") {
                 $('#msgUsuario').removeClass('hidden');
                 return false;
             }
-            else
-            {
+            else {
                 $('#msgUsuario').addClass('hidden');
             }
 
@@ -121,8 +135,7 @@
 
         $('#txtEmail').on('blur', function () {
 
-            if ($('#txtEmail').val() == "")
-            {
+            if ($('#txtEmail').val() == "") {
                 $('#msgEmail').removeClass('hidden');
                 return false;
             }

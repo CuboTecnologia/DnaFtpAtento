@@ -49,7 +49,7 @@
                                 @Html.DisplayFor(modelItem => item.Grupos.Nome)
                             </td>
                             <td nowrap>
-                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login }, new { @id = "lnkEditar", @class = "editarUsuario" })
+                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login, grupoUsuario = item.Grupos.Codigo }, new { @id = "lnkEditar", @class = "editarUsuario" })
                                 <label> | </label>
                                 @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
                             </td>
