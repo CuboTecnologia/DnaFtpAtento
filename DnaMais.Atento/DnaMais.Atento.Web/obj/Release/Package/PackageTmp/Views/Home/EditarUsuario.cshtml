@@ -39,7 +39,7 @@
                             <br />
                             <label>Escolha o(s) grupo(s):</label>
 
-                            @{var listaGrupos = Session["GruposUsuario"] as List<string>;
+                            @{var listaGrupos = ViewBag.GruposUsuario as List<string>;
 
                             foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewData["GrupoUsuarioCkl"])
                             {

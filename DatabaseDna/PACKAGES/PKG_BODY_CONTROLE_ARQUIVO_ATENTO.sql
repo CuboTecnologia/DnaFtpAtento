@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY DNA.PKG_CONTROLE_ARQUIVO_ATENTO
+CREATE OR REPLACE PACKAGE BODY PKG_CONTROLE_ARQUIVO_ATENTO
 AS
     PROCEDURE ATUALIZAR_STATUS_DOWNLOAD
     (
@@ -458,10 +458,36 @@ AS
     PROCEDURE LISTAR_USUARIOS
     (
         P_DS_LOGIN        IN  USUARIO_ATENTO.DS_LOGIN%TYPE,
+        P_TIPO_USUARIO    IN  USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE,
         RETORNO_USUARIOS  OUT SYS_REFCURSOR
     )
     IS
     BEGIN
+         IF P_TIPO_USUARIO = 'A' THEN
+         
+         OPEN
+             RETORNO_USUARIOS
+         FOR
+         
+         SELECT 
+              USUARIO_ATENTO.DS_LOGIN
+             ,USUARIO_ATENTO.NM_USUARIO
+             ,USUARIO_ATENTO.DS_EMAIL
+             ,GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO
+             ,GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO
+          FROM 
+              USUARIO_ATENTO
+          JOIN
+              USUARIO_ATENTO_GRUPO_USUARIO
+          ON
+              USUARIO_ATENTO_GRUPO_USUARIO.DS_LOGIN = USUARIO_ATENTO.DS_LOGIN
+          JOIN
+              GRUPO_USUARIO_ATENTO
+          ON
+              GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO = USUARIO_ATENTO_GRUPO_USUARIO.ID_GRUPO_USUARIO_ATENTO
+          ORDER BY USUARIO_ATENTO.DS_LOGIN;
+         
+         ELSE
          
          OPEN 
               RETORNO_USUARIOS
@@ -490,6 +516,8 @@ AS
                                                                            WHERE A.ID_GRUPO_USUARIO_ATENTO = G.ID_GRUPO_USUARIO_ATENTO
                                                                              AND A.DS_LOGIN = P_DS_LOGIN)                                         
           ORDER BY USUARIO_ATENTO.DS_LOGIN;
+          
+          END IF;
      
     END;
   
@@ -735,6 +763,26 @@ AS
          WHERE 
                 UAGU.DS_LOGIN = P_DS_LOGIN;
     
+    END;
+    
+    PROCEDURE VERIFICAR_USUARIO
+    (
+        P_DS_LOGIN            IN USUARIO_ATENTO.DS_LOGIN%TYPE,
+        RETORNO_USUARIO       OUT SYS_REFCURSOR
+    )
+    
+    IS
+    BEGIN
+          OPEN
+              RETORNO_USUARIO          
+          FOR
+          
+          SELECT
+                UA.DS_LOGIN
+          FROM
+                USUARIO_ATENTO UA
+          WHERE
+                UA.DS_LOGIN = P_DS_LOGIN;
     END;
     
 END;

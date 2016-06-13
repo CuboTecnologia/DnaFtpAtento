@@ -105,12 +105,22 @@ namespace DnaMais.Atento.Web.Controllers
 
             if (user.Login != null && user.Senha != null && user.Usuario != null)
             {
-                _controleArquivoRepository = new ControleArquivoRepository();
-                _controleArquivoRepository.CriarUsuario(user, grupoUsuario);
+                if (_controleArquivoRepository.VerificarUsuario(user.Login) == true)
+                {
+                    TempData["repeatUser"] = "Já existe um usuário com o Login " + user.Login + ".";
 
-                TempData["newUser"] = "Usuário Criado com Sucesso";
+                    return RedirectToAction("CriarUsuario", "Home");
+                }
+                else
+                {
+                    _controleArquivoRepository = new ControleArquivoRepository();
+                    _controleArquivoRepository.CriarUsuario(user, grupoUsuario);
 
-                return RedirectToAction("ListarArquivo", "ControleArquivo");
+                    TempData["newUser"] = "Usuário Criado com Sucesso";
+
+                    return RedirectToAction("ListarArquivo", "ControleArquivo");
+                }
+
             }
             else
             {
@@ -180,7 +190,7 @@ namespace DnaMais.Atento.Web.Controllers
                 return Redirect(System.Web.Security.FormsAuthentication.LoginUrl);
             }
 
-            var models = _controleArquivoRepository.ListarUsuarios(Session["LoginUsuario"].ToString());
+            var models = _controleArquivoRepository.ListarUsuarios(Session["LoginUsuario"].ToString(), Session["TipoUsuario"].ToString());
 
             return View(models);
         }
@@ -198,6 +208,8 @@ namespace DnaMais.Atento.Web.Controllers
             }
 
             ViewData["GrupoUsuarioCkl"] = _controleArquivoRepository.GetAllGruposCkl(Session["TipoUsuario"].ToString(), Session["LoginUsuario"].ToString()).ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(), Text = x.Nome });
+
+            ViewBag.GruposUsuario = _controleArquivoRepository.GetAllGrupos(usuarioLogin).ToList();
 
             var models = _controleArquivoRepository.EditarUsuario(usuarioNome, usuarioLogin);
 

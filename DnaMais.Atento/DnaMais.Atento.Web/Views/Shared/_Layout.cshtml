@@ -42,9 +42,13 @@
 
                         @Html.ActionLink("Sair do Sistema", "LogOff", "Home", new { area = "" }, new { @class = "btn btn-logoff" })
 
-                        if (Session["TipoUsuario"].ToString() == "A" || Session["TipoUsuario"].ToString() == "M")
+                        if (Session["TipoUsuario"].ToString() == "A")
                         {
                             @Html.ActionLink("Gerenciar Grupos", "ListarGrupoUsuario", "Home", new { area = "" }, new { @class = "btn btn-menu" })
+                            @Html.ActionLink("Gerenciar Usuários", "ListarUsuarios", "Home", new { area = "" }, new { @class = "btn btn-menu" })
+                        }
+                        else if (Session["TipoUsuario"].ToString() == "M")
+                        {
                             @Html.ActionLink("Gerenciar Usuários", "ListarUsuarios", "Home", new { area = "" }, new { @class = "btn btn-menu" })
                         }
 

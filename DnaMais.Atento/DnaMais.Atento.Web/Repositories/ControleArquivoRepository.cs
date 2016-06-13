@@ -450,7 +450,7 @@ namespace DnaMais.Atento.Web.Repositories
 
         #region Listar Usuários
 
-        public IEnumerable<UsuarioModel> ListarUsuarios(string loginUsuario)
+        public IEnumerable<UsuarioModel> ListarUsuarios(string loginUsuario, string tipoUsuario)
         {
             var usuarios = new Collection<UsuarioModel>();
 
@@ -466,6 +466,7 @@ namespace DnaMais.Atento.Web.Repositories
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.LISTAR_USUARIOS";
                         command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = loginUsuario;
+                        command.Parameters.Add("P_TIPO_USUARIO", OracleDbType.Varchar2).Value = tipoUsuario;
                         command.Parameters.Add("RETORNO_USUARIOS", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
 
                         command.ExecuteNonQuery();
@@ -915,6 +916,41 @@ namespace DnaMais.Atento.Web.Repositories
                 }
             }
             return grupos;
+        }
+
+        #endregion
+
+        #region Verificar Usuário
+
+        public bool VerificarUsuario(string loginUsuario)
+        {
+            using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
+            {
+                if (conn.State == System.Data.ConnectionState.Closed)
+                    conn.Open();
+
+                using (var command = conn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.VERIFICAR_USUARIO";
+                    command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = loginUsuario;
+                    command.Parameters.Add("RETORNO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                    DataTable dt = new DataTable();
+                    OracleDataReader reader = command.ExecuteReader();
+
+                    dt.Load(reader);
+
+                    if (dt.Rows.Count == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
 
         #endregion
