@@ -25,7 +25,7 @@
             @Html.LabelFor(model => model.Login)
         </div>
         <div class="editor-field">
-            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin" })
+            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @id = "txtLogin", @maxlength = 20 })
             <div id="msgLogin" style="color:red" class="hidden">Campo login obrigatório</div>
         </div>
         <br />

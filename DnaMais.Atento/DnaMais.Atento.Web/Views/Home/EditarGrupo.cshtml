@@ -23,13 +23,13 @@
 
                         <div class="col-md-5">
                             <label>Nome Atual:&emsp;</label>@Html.DisplayFor(model => model.Nome)
-                            @Html.TextBox("txtGrupo", null, new { @class = "form-control", @placeholder = "Digite um novo nome para o grupo" })
+                            @Html.TextBox("txtGrupo", Model.Nome, new { @class = "form-control"})
                             <div id="msgGrupo" class="hidden" style="color:red">Campo nome obrigatório</div>
                         </div>
 
                         <div class="col-md-5">
                             <label>Descrição Atual:&emsp;</label>@Html.DisplayFor(model => model.Descricao)
-                            @Html.TextBox("txtDescricao", null, new { @class = "form-control", @placeholder = "Digite uma nova descrição para o grupo" })
+                            @Html.TextBox("txtDescricao", Model.Descricao, new { @class = "form-control" })
                             <div id="msgDescricao" class="hidden" style="color:red">Campo descrição obrigatório</div>
                         </div>
                     </div>

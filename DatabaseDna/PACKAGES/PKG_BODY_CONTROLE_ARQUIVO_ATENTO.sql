@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY PKG_CONTROLE_ARQUIVO_ATENTO
+CREATE OR REPLACE PACKAGE BODY DNAONLINE.PKG_CONTROLE_ARQUIVO_ATENTO
 AS
     PROCEDURE ATUALIZAR_STATUS_DOWNLOAD
     (
@@ -147,6 +147,7 @@ AS
                 ,DS_EMAIL
                 ,CD_TIPO_USUARIO
                 ,NM_GRUPO_USUARIO_ATENTO
+                ,DS_CRIADOR_GRUPO
           FROM 
                 USUARIO_ATENTO
           JOIN
@@ -170,7 +171,7 @@ AS
         RETORNO_CONTROLE_ARQUIVO    OUT SYS_REFCURSOR
     )
     IS
-        V_CD_TIPO_USUARIO DNA.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
+        V_CD_TIPO_USUARIO DNAONLINE.USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE;
     BEGIN
     
          SELECT
@@ -178,7 +179,7 @@ AS
          INTO
              V_CD_TIPO_USUARIO
          FROM
-             DNA.USUARIO_ATENTO  
+             DNAONLINE.USUARIO_ATENTO  
          WHERE
              DS_LOGIN = P_DS_LOGIN;
     
@@ -225,8 +226,8 @@ AS
           WHERE
                 (V_CD_TIPO_USUARIO = 'A'
                  OR CONTROLE_ARQ_ATENTO.DS_LOGIN IN (SELECT DISTINCT GRP.DS_LOGIN
-                                                     FROM   DNA.USUARIO_ATENTO_GRUPO_USUARIO GRP
-                                                     JOIN   DNA.USUARIO_ATENTO USU
+                                                     FROM   DNAONLINE.USUARIO_ATENTO_GRUPO_USUARIO GRP
+                                                     JOIN   DNAONLINE.USUARIO_ATENTO USU
                                                      ON     USU.DS_LOGIN = GRP.DS_LOGIN
                                                      WHERE  USU.DS_LOGIN = P_DS_LOGIN))
           ORDER BY
@@ -273,7 +274,8 @@ AS
         P_NM_USUARIO                  IN USUARIO_ATENTO.NM_USUARIO%TYPE,
         P_DS_EMAIL                    IN USUARIO_ATENTO.DS_EMAIL%TYPE,
         P_CD_GRUPOS                   IN VARCHAR2,
-        P_CD_TIPO_USUARIO             IN USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE
+        P_CD_TIPO_USUARIO             IN USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE,
+        P_DS_CRIADOR_USUARIO          IN USUARIO_ATENTO.DS_CRIADOR_USUARIO%TYPE
     )
     IS
     BEGIN
@@ -283,14 +285,16 @@ AS
                      ,DS_CONFIRMACAO_SENHA
                      ,NM_USUARIO          
                      ,DS_EMAIL            
-                     ,CD_TIPO_USUARIO)
+                     ,CD_TIPO_USUARIO
+                     ,DS_CRIADOR_USUARIO)
          VALUES
                      (P_DS_LOGIN
                      ,P_DS_SENHA
                      ,P_DS_CONFIRMACAO_SENHA
                      ,P_NM_USUARIO
                      ,P_DS_EMAIL
-                     ,P_CD_TIPO_USUARIO);
+                     ,P_CD_TIPO_USUARIO
+                     ,P_DS_CRIADOR_USUARIO);
                      
          INSERT INTO USUARIO_ATENTO_GRUPO_USUARIO
                      (DS_LOGIN
@@ -326,39 +330,78 @@ AS
     
     PROCEDURE LISTAR_GRUPO_USUARIO
     (
+        P_DS_LOGIN               IN USUARIO_ATENTO.DS_LOGIN%TYPE,
+        P_TIPO_USUARIO           IN USUARIO_ATENTO.CD_TIPO_USUARIO%TYPE,      
         RETORNO_GRUPO_USUARIO    OUT SYS_REFCURSOR
     )
     IS
     BEGIN
-         OPEN
-             RETORNO_GRUPO_USUARIO
-         FOR
-         
-         SELECT
-               ID_GRUPO_USUARIO_ATENTO
-               ,NM_GRUPO_USUARIO_ATENTO
-               ,DS_GRUPO_USUARIO_ATENTO
-         FROM
-               GRUPO_USUARIO_ATENTO
-         ORDER BY 
-               ID_GRUPO_USUARIO_ATENTO ASC;
+    
+        IF P_TIPO_USUARIO = 'A' THEN
+    
+             OPEN
+                 RETORNO_GRUPO_USUARIO
+             FOR
+             
+             SELECT
+                   ID_GRUPO_USUARIO_ATENTO
+                   ,NM_GRUPO_USUARIO_ATENTO
+                   ,DS_GRUPO_USUARIO_ATENTO
+                   ,DS_CRIADOR_GRUPO
+             FROM
+                   GRUPO_USUARIO_ATENTO
+             ORDER BY 
+                   ID_GRUPO_USUARIO_ATENTO ASC;
+        ELSE
+    
+             OPEN
+                 RETORNO_GRUPO_USUARIO
+             FOR
+            
+             SELECT 
+                    ID_GRUPO_USUARIO_ATENTO
+                    ,NM_GRUPO_USUARIO_ATENTO
+                    ,DS_GRUPO_USUARIO_ATENTO
+                    ,DS_CRIADOR_GRUPO
+             FROM   
+                    GRUPO_USUARIO_ATENTO
+             WHERE
+                    ID_GRUPO_USUARIO_ATENTO IN 
+                    (SELECT 
+                            ID_GRUPO_USUARIO_ATENTO 
+                    FROM 
+                            USUARIO_ATENTO_GRUPO_USUARIO 
+                    WHERE 
+                            DS_LOGIN = P_DS_LOGIN)
+              OR
+                    DS_CRIADOR_GRUPO IN
+                    (SELECT
+                           DS_CRIADOR_GRUPO
+                     FROM
+                           GRUPO_USUARIO_ATENTO
+                     WHERE
+                           DS_CRIADOR_GRUPO = P_DS_LOGIN);
+        END IF;
     END;
     
-    PROCEDURE ATUALIZAR_GRUPO_USUARIO
+    PROCEDURE CRIAR_GRUPO_USUARIO
     (
         P_NM_GRUPO_USUARIO_ATENTO     IN GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO%TYPE,
-        P_DS_GRUPO_USUARIO_ATENTO     IN GRUPO_USUARIO_ATENTO.DS_GRUPO_USUARIO_ATENTO%TYPE
+        P_DS_GRUPO_USUARIO_ATENTO     IN GRUPO_USUARIO_ATENTO.DS_GRUPO_USUARIO_ATENTO%TYPE,
+        P_CRIADOR_GRUPO               IN GRUPO_USUARIO_ATENTO.DS_CRIADOR_GRUPO%TYPE
     )
     IS
     BEGIN
          INSERT INTO GRUPO_USUARIO_ATENTO
                      (ID_GRUPO_USUARIO_ATENTO
                      ,NM_GRUPO_USUARIO_ATENTO
-                     ,DS_GRUPO_USUARIO_ATENTO)
+                     ,DS_GRUPO_USUARIO_ATENTO
+                     ,DS_CRIADOR_GRUPO)
               VALUES
                      (SQ_GRUPO_USUARIO_ATENTO.NEXTVAL
                      ,P_NM_GRUPO_USUARIO_ATENTO
-                     ,P_DS_GRUPO_USUARIO_ATENTO);
+                     ,P_DS_GRUPO_USUARIO_ATENTO
+                     ,P_CRIADOR_GRUPO);
               COMMIT; 
     END;
     
@@ -451,7 +494,15 @@ AS
                     FROM 
                             USUARIO_ATENTO_GRUPO_USUARIO 
                     WHERE 
-                            DS_LOGIN = P_DS_LOGIN);
+                            DS_LOGIN = P_DS_LOGIN)
+             OR
+                    DS_CRIADOR_GRUPO IN
+                    (SELECT
+                           DS_CRIADOR_GRUPO
+                     FROM
+                           GRUPO_USUARIO_ATENTO
+                     WHERE
+                           DS_CRIADOR_GRUPO = P_DS_LOGIN);
          END IF;
     END;
     
@@ -473,8 +524,10 @@ AS
               USUARIO_ATENTO.DS_LOGIN
              ,USUARIO_ATENTO.NM_USUARIO
              ,USUARIO_ATENTO.DS_EMAIL
+             ,USUARIO_ATENTO.DS_CRIADOR_USUARIO
              ,GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO
              ,GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO
+             ,GRUPO_USUARIO_ATENTO.DS_CRIADOR_GRUPO
           FROM 
               USUARIO_ATENTO
           JOIN
@@ -497,8 +550,10 @@ AS
               USUARIO_ATENTO.DS_LOGIN
              ,USUARIO_ATENTO.NM_USUARIO
              ,USUARIO_ATENTO.DS_EMAIL
+             ,USUARIO_ATENTO.DS_CRIADOR_USUARIO
              ,GRUPO_USUARIO_ATENTO.NM_GRUPO_USUARIO_ATENTO
              ,GRUPO_USUARIO_ATENTO.ID_GRUPO_USUARIO_ATENTO
+             ,GRUPO_USUARIO_ATENTO.DS_CRIADOR_GRUPO
           FROM 
               USUARIO_ATENTO
           JOIN
@@ -514,7 +569,8 @@ AS
                                                                             FROM USUARIO_ATENTO_GRUPO_USUARIO A,
                                                                                  GRUPO_USUARIO_ATENTO         G
                                                                            WHERE A.ID_GRUPO_USUARIO_ATENTO = G.ID_GRUPO_USUARIO_ATENTO
-                                                                             AND A.DS_LOGIN = P_DS_LOGIN)                                         
+                                                                             AND A.DS_LOGIN = P_DS_LOGIN
+                                                                             OR G.DS_CRIADOR_GRUPO = P_DS_LOGIN)                                         
           ORDER BY USUARIO_ATENTO.DS_LOGIN;
           
           END IF;

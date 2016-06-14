@@ -49,6 +49,7 @@ namespace DnaMais.Atento.Web.Controllers
                 Session.Add("EmailUsuario", usuarioRetorno.Email);
                 Session.Add("TipoUsuario", usuarioRetorno.TipoUsuario);
                 Session.Add("GruposUsuario", _controleArquivoRepository.GetAllGrupos(Session["LoginUsuario"].ToString()).ToList());
+                Session.Add("CriadorGrupo", usuarioRetorno.Grupos.Criador);
 
                 //ViewBag.GruposUsuario = _controleArquivoRepository.GetAllGrupos(Session["LoginUsuario"].ToString()).ToList();
 
@@ -114,7 +115,7 @@ namespace DnaMais.Atento.Web.Controllers
                 else
                 {
                     _controleArquivoRepository = new ControleArquivoRepository();
-                    _controleArquivoRepository.CriarUsuario(user, grupoUsuario);
+                    _controleArquivoRepository.CriarUsuario(user, grupoUsuario, Session["LoginUsuario"].ToString());
 
                     TempData["newUser"] = "Usuário Criado com Sucesso";
 
@@ -136,7 +137,7 @@ namespace DnaMais.Atento.Web.Controllers
         {
             ControleArquivoRepository _controleArquivoRepository = new ControleArquivoRepository();
 
-            var models = _controleArquivoRepository.GetAllGrupos();
+            var models = _controleArquivoRepository.GetAllGrupos(Session["LoginUsuario"].ToString(), Session["TipoUsuario"].ToString());
 
             return View(models);
         }
@@ -163,7 +164,7 @@ namespace DnaMais.Atento.Web.Controllers
             if (model != null)
             {
                 _controleArquivoRepository = new ControleArquivoRepository();
-                _controleArquivoRepository.AddGrupo(model);
+                _controleArquivoRepository.AddGrupo(model, Session["LoginUsuario"].ToString());
 
                 TempData["newGrupo"] = "Grupo Criado com Sucesso";
 

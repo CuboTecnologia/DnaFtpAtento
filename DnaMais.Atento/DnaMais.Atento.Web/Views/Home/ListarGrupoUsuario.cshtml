@@ -45,11 +45,25 @@
                                 @Html.DisplayFor(modelItem => item.Descricao)
                             </td>
                             <td nowrap class="col-md-1">
-                                @Html.ActionLink("Editar", "EditarGrupo", "Home", new { nomeGrupo = item.Nome, codigoGrupo = item.Codigo }, null)
-                                <label> | </label>
-                                @Html.ActionLink("Excluir", "DeletarGrupo", "Home", new { codGrupo = item.Codigo }, new { @class = "excluirGrupo" })
-                                <label> | </label>
-                                @Html.ActionLink("Membros", "DetalharGrupo", "Home", new { codigoGrupo = item.Codigo, nomeGrupo = item.Nome }, null)
+
+                                @if (Session["TipoUsuario"].ToString() == "A")
+                                {
+                                    @Html.ActionLink("Editar", "EditarGrupo", "Home", new { nomeGrupo = item.Nome, codigoGrupo = item.Codigo }, null)
+                                    <label> | </label>
+                                    @Html.ActionLink("Excluir", "DeletarGrupo", "Home", new { codGrupo = item.Codigo }, new { @class = "excluirGrupo" })
+                                    <label> | </label>
+                                    @Html.ActionLink("Membros", "DetalharGrupo", "Home", new { codigoGrupo = item.Codigo, nomeGrupo = item.Nome }, null)
+                                }
+
+                                else if (Session["CriadorGrupo"].ToString() != item.Criador)
+                                {
+                                    @Html.ActionLink("Editar", "EditarGrupo", "Home", new { nomeGrupo = item.Nome, codigoGrupo = item.Codigo }, null)
+                                    <label> | </label>
+                                    @Html.ActionLink("Excluir", "DeletarGrupo", "Home", new { codGrupo = item.Codigo }, new { @class = "excluirGrupo" })
+                                    <label> | </label>
+                                    @Html.ActionLink("Membros", "DetalharGrupo", "Home", new { codigoGrupo = item.Codigo, nomeGrupo = item.Nome }, null)
+                                }
+
                             </td>
                         </tr>
                     }

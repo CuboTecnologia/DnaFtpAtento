@@ -24,13 +24,13 @@
 
                         <div class="col-md-5">
                             <label>Nome/Apelido Atual:&emsp;</label>@Html.DisplayFor(model => model.Usuario)
-                            @Html.TextBox("txtUsuario", null, new { @class = "form-control", @placeholder = "Digite um novo nome / apelido" })
+                            @Html.TextBox("txtUsuario", Html.DisplayFor(model => model.Usuario), new { @class = "form-control" })
                             <div id="msgUsuario" class="hidden" style="color:red">Campo nome/apelido obrigatório</div>
                         </div>
 
                         <div class="col-md-5">
                             <label>E-Mail Atual:&emsp;</label>@Html.DisplayFor(model => model.Email)
-                            @Html.TextBox("txtEmail", null, new { @class = "form-control", @placeholder = "Digite um novo e-mail" })
+                            @Html.TextBox("txtEmail", Html.DisplayFor(model => model.Email), new { @class = "form-control"})
                             <div id="msgEmail" class="hidden" style="color:red">Campo e-mail obrigatório</div>
                             <div id="msgValidarEmail" class="hidden" style="color:red">Insira um e-mail válido</div>
                         </div>

@@ -34,8 +34,12 @@ namespace DnaMais.Atento.Web.Models
         [Required]
         public string TipoUsuario { get; set; }
 
+        [Required]
+        public string CriadorUsuario { get; set; }
+
         public string DescricaoGrupo { get; set; }
         public int[] CodigoGrupo { get; set; }
+        public string CriadorGrupo { get; set; }
         public GrupoUsuarioModel Grupos { get; set; }
 
     }

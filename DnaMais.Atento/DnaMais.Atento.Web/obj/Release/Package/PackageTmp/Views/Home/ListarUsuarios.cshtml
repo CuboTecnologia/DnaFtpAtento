@@ -49,9 +49,30 @@
                                 @Html.DisplayFor(modelItem => item.Grupos.Nome)
                             </td>
                             <td nowrap>
-                                @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login, grupoUsuario = item.Grupos.Codigo }, new { @id = "lnkEditar", @class = "editarUsuario" })
-                                <label> | </label>
-                                @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+
+                                @if (Session["TipoUsuario"].ToString() == "A")
+                                {
+                                    @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login, grupoUsuario = item.Grupos.Codigo }, new { @id = "lnkEditar", @class = "editarUsuario" })
+                                    <label> | </label>
+                                    @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+                                }
+                                
+                                else if (item.CriadorUsuario == Session["LoginUsuario"].ToString())
+                                {
+                                    @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login, grupoUsuario = item.Grupos.Codigo }, new { @id = "lnkEditar", @class = "editarUsuario" })
+                                    <label> | </label>
+                                    @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+                                }
+
+                                else if (Session["CriadorGrupo"].ToString() != item.Grupos.Criador)
+                                {
+                                    @Html.ActionLink("Editar", "EditarUsuario", "Home", new { usuarioNome = item.Usuario, usuarioLogin = item.Login, grupoUsuario = item.Grupos.Codigo }, new { @id = "lnkEditar", @class = "editarUsuario" })
+                                    <label> | </label>
+                                    @Html.ActionLink("Excluir", "DeletarUsuario", "Home", new { usuarioLogin = item.Login }, new { @class = "excluirUsuario" })
+                                }
+
+                                
+                                
                             </td>
                         </tr>
                     }
@@ -67,7 +88,7 @@
 </div>
 
 <script>
-    
+
     $(document).ready(function () {
 
         var excluirClick;

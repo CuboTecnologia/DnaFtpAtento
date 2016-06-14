@@ -155,7 +155,8 @@ namespace DnaMais.Atento.Web.Repositories
                                 objRetorno.TipoUsuario = dt.Rows[0]["CD_TIPO_USUARIO"].ToString();
                                 objRetorno.Grupos = new GrupoUsuarioModel
                                 {
-                                    Nome = dt.Rows[0]["NM_GRUPO_USUARIO_ATENTO"].ToString()
+                                    Nome = dt.Rows[0]["NM_GRUPO_USUARIO_ATENTO"].ToString(),
+                                    Criador = dt.Rows[0]["DS_CRIADOR_GRUPO"].ToString()
                                 };
                                 return objRetorno;
                             }
@@ -182,7 +183,7 @@ namespace DnaMais.Atento.Web.Repositories
 
         #region Criar Usuário
 
-        public void CriarUsuario(UsuarioModel user, string[] grupos)
+        public void CriarUsuario(UsuarioModel user, string[] grupos, string loginUsuario)
         {
 
             using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
@@ -208,6 +209,7 @@ namespace DnaMais.Atento.Web.Repositories
                         command.Parameters.Add("P_DS_EMAIL", OracleDbType.Varchar2).Value = user.Email;
                         command.Parameters.Add("P_CD_GRUPOS", OracleDbType.Varchar2).Value = codGrupos.Substring(0, codGrupos.Length - 1);
                         command.Parameters.Add("P_CD_TIPO_USUARIO", OracleDbType.Char).Value = user.TipoUsuario;
+                        command.Parameters.Add("P_DS_CRIADOR_USUARIO", OracleDbType.Varchar2).Value = loginUsuario;
 
                         command.ExecuteNonQuery();
                     }
@@ -260,9 +262,9 @@ namespace DnaMais.Atento.Web.Repositories
 
         #endregion
 
-        #region Select Grupo de Usuários (Grid)
+        #region Listar Grupo de Usuários (Grid)
 
-        public IEnumerable<GrupoUsuarioModel> GetAllGrupos()
+        public IEnumerable<GrupoUsuarioModel> GetAllGrupos(string loginUsuario, string tipoUsuario)
         {
             var grupos = new Collection<GrupoUsuarioModel>();
 
@@ -274,6 +276,8 @@ namespace DnaMais.Atento.Web.Repositories
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.LISTAR_GRUPO_USUARIO";
+                        command.Parameters.Add("P_DS_LOGIN", OracleDbType.Varchar2).Value = loginUsuario;
+                        command.Parameters.Add("P_TIPO_USUARIO", OracleDbType.Varchar2).Value = tipoUsuario;
                         command.Parameters.Add("RETORNO_GRUPO_USUARIO", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
 
                         if (conn.State == System.Data.ConnectionState.Closed)
@@ -287,7 +291,8 @@ namespace DnaMais.Atento.Web.Repositories
                                 {
                                     Codigo = (int)reader["ID_GRUPO_USUARIO_ATENTO"],
                                     Nome = reader["NM_GRUPO_USUARIO_ATENTO"].ToString(),
-                                    Descricao = reader["DS_GRUPO_USUARIO_ATENTO"].ToString()
+                                    Descricao = reader["DS_GRUPO_USUARIO_ATENTO"].ToString(),
+                                    Criador = reader["DS_CRIADOR_GRUPO"].ToString()
                                 });
                             }
                         }
@@ -305,7 +310,7 @@ namespace DnaMais.Atento.Web.Repositories
 
         #region Criar Grupo de Usuário
 
-        public void AddGrupo(GrupoUsuarioModel model)
+        public void AddGrupo(GrupoUsuarioModel model, string loginUsuario)
         {
 
             using (var conn = new OracleConnection(ServerConfiguration.ConnectionString))
@@ -319,9 +324,10 @@ namespace DnaMais.Atento.Web.Repositories
                     {
 
                         command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.ATUALIZAR_GRUPO_USUARIO";
+                        command.CommandText = "PKG_CONTROLE_ARQUIVO_ATENTO.CRIAR_GRUPO_USUARIO";
                         command.Parameters.Add("P_NM_GRUPO_USUARIO_ATENTO", OracleDbType.Varchar2).Value = model.Nome;
                         command.Parameters.Add("P_DS_GRUPO_USUARIO_ATENTO", OracleDbType.Varchar2).Value = model.Descricao;
+                        command.Parameters.Add("P_CRIADOR_GRUPO", OracleDbType.Varchar2).Value = loginUsuario;
 
                         command.ExecuteNonQuery();
 
@@ -480,11 +486,13 @@ namespace DnaMais.Atento.Web.Repositories
                                         Login = reader["DS_LOGIN"].ToString(),
                                         Usuario = reader["NM_USUARIO"].ToString(),
                                         Email = reader["DS_EMAIL"].ToString(),
+                                        CriadorUsuario = reader["DS_CRIADOR_USUARIO"].ToString(),
 
                                         Grupos = new GrupoUsuarioModel
                                         {
                                             Nome = reader["NM_GRUPO_USUARIO_ATENTO"].ToString(),
                                             Codigo = Convert.ToInt32(reader["ID_GRUPO_USUARIO_ATENTO"]),
+                                            Criador = reader["DS_CRIADOR_GRUPO"].ToString()
                                         }
                                     });
                             }
