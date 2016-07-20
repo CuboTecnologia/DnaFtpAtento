@@ -105,6 +105,17 @@
 
             $('#btnNovoUsuario').click(function () {
 
+                var sEmail = $('#txtEmail').val();
+
+                if (!validateEmail(sEmail)) {
+                    $('#msgValidarEmail').removeClass('hidden');
+                    $('#txtEmail').focus();
+                    return false;
+                }
+                else {
+                    $('#msgValidarEmail').addClass('hidden');
+                }
+
                 if (!$('input:checkbox').is(":checked")) {
                     $('#msgGrupo').removeClass('hidden');
                     return false;
