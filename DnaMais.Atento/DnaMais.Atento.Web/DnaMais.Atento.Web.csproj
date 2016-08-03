@@ -255,7 +255,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
-    <Content Include="Views\ControleArquivo\Create.cshtml" />
+    <Content Include="Views\ControleArquivo\EnviarArquivo.cshtml" />
     <Content Include="Views\ControleArquivo\ListarArquivo.cshtml" />
     <Content Include="Views\Home\CriarUsuario.cshtml" />
     <Content Include="Views\ControleArquivo\ListarFtpEntrada.cshtml" />

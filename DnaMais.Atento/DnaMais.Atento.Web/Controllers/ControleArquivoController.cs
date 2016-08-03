@@ -47,10 +47,10 @@ namespace DnaMais.Atento.Web.Controllers
         }
         #endregion
 
-        #region Action Create / View Create
+        #region Action EnviarArquivo / View EnviarArquivo
         //
-        // GET: /ControleArquivo/Create
-        public ActionResult Create()
+        // GET: /ControleArquivo/EnviarArquivo
+        public ActionResult EnviarArquivo()
         {
             ViewData["LayoutsEntrada"] = _layoutEntradaRepository.GetAll().ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(""), Text = x.Nome });
             ViewData["LayoutsSaida"] = _layoutSaidaRepository.GetAll().ToList().ConvertAll(x => new SelectListItem { Value = x.Codigo.ToString(""), Text = x.Nome });
@@ -59,11 +59,11 @@ namespace DnaMais.Atento.Web.Controllers
         }
         #endregion
 
-        #region Create / View Create [HttpPost]
+        #region EnviarArquivo / View EnviarArquivo [HttpPost]
         //
-        // POST: /ControleArquivo/Create
+        // POST: /ControleArquivo/EnviarArquivo
         [HttpPost]
-        public ActionResult Create(HttpPostedFileBase file)
+        public ActionResult EnviarArquivo(HttpPostedFileBase file)
         {
             if (Session["NomeUsuario"] == null)
             {
@@ -115,7 +115,7 @@ namespace DnaMais.Atento.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Create");
+                    return RedirectToAction("EnviarArquivo");
                 }
 
             }
@@ -176,7 +176,7 @@ namespace DnaMais.Atento.Web.Controllers
 
             try
             {
-                //Create FTP Request.
+                //EnviarArquivo FTP Request.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FTPSaida);
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
 
@@ -342,7 +342,7 @@ namespace DnaMais.Atento.Web.Controllers
 
             try
             {
-                //Create FTP Request.
+                //EnviarArquivo FTP Request.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(FTPSaida + nomeArquivoDownload);
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
 
